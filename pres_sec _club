@@ -1,4 +1,6 @@
 //SINGLY LINKEDLIST
+//whenever we make a nnf , nnb , after taking details. nnf->next=NULL is essential.
+//use do while to keep adding members.
 //In delete by PRN, typing starting prn fucks up.
 //In dipslay, seperate display for pres and sec isnt happening.
 //Node swap isnt happening
