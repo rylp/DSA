@@ -1,0 +1,278 @@
+//writing the int bin_get() function is a good trick n logic. SEE IT.
+//understand how we are playing with another seperate ll for every operation
+//Take care of how we do the 1s and 2s complement.
+//Take count of the no of digits in the get_binary function itself.
+//AND , compare those in main and add the reqd zero's to get the reqd result.
+
+#include <iostream>
+using namespace std;
+class node
+{
+public:
+	int digit;
+	node* next;
+	node* prev;
+};
+class dll
+{
+public:
+	int count;
+	bool in1;
+	bool in2;
+	bool sum;
+	bool carry;
+	node* head;
+	node* tail;
+	dll()
+	{
+		head = NULL;
+		tail = NULL;
+	}
+	int binget(int num);
+	void add_first(node* nnf);
+	void add_last(node* nnl);
+	void display(node* just);
+	void comp1(node* start);
+	void comp2(node* end);
+	void binary_add(node* end1, node* end2);
+};
+void dll::add_first(node* nnf)
+{
+	if (head == NULL)
+	{
+		tail = head = nnf;
+		nnf->next = NULL;
+		nnf->prev = NULL;
+	}
+	else
+	{
+		nnf->next = head;
+		head->prev = nnf;
+		nnf->prev = NULL;
+		head = nnf;
+	}
+}
+void dll::add_last(node* nnl)
+{
+	if (head == NULL)
+	{
+		tail = head = nnl;
+		nnl->next = NULL;
+		nnl->prev = NULL;
+	}
+	else
+	{
+		tail->next = nnl;
+		nnl->prev = tail;
+		nnl->next = NULL;
+		tail = nnl;
+	}
+}
+void dll::display(node* just)
+{
+	while (just != NULL)
+	{
+		cout << just->digit << " ";
+		just = just->next;
+	}
+	cout << endl;
+}
+void dll::comp1(node* start)
+{
+	while (start != NULL)
+	{
+		node* nn = new node;
+		if (start->digit == 1)
+		{
+			nn->digit = 0;
+			add_last(nn);
+		}
+		else
+		{
+			nn->digit = 1;
+			add_last(nn);
+		}
+		start = start->next;
+	}
+}
+void dll::comp2(node* end)
+{
+	in1 = end->digit;
+	in2 = 1;
+	sum = in1 ^ in2;
+	carry = in1 & in2;
+	node* n = new node;
+	n->digit = sum;
+	add_first(n);
+	end = end->prev;
+	while (end != NULL)
+	{
+		node* nn = new node;
+		in1 = end->digit;
+		in2 = 0;
+		if (!carry)
+		{
+			sum = in1 ^ in2;
+			carry = in1 & in2;
+			nn->digit = sum;
+			add_first(nn);
+		}
+		else
+		{
+			sum = !in1;
+			carry = in1;
+			nn->digit = sum;
+			add_first(nn);
+		}
+		end = end->prev;
+	}
+}
+int dll::binget(int num)
+{
+	count = 0;
+	do
+	{
+		node* nn = new node;
+		int q = num / 2;
+		int r = num % 2;
+		if (r == 1)
+		{
+			nn->digit = 1;
+			count++;
+			add_first(nn);
+		}
+		else
+		{
+			nn->digit = 0;
+			count++;
+			add_first(nn);
+		}
+		num = q;
+
+	} while (num != 1);
+	node* nnn = new node;
+	nnn->digit = 1;
+	count++;
+	add_first(nnn);
+	display(head);
+	return count;
+
+}
+void dll::binary_add(node* end1, node* end2)
+{
+	in1 = end1->digit;
+	in2 = end2->digit;
+	sum = in1 ^ in2;
+	carry = in1 & in2;
+	node* n = new node;
+	n->digit = sum;
+	add_first(n);
+	end1 = end1->prev;
+	end2 = end2->prev;
+	while (end1 != NULL && end2 != NULL)
+	{
+		node* nn = new node;
+		in1 = end1->digit;
+		in2 = end2->digit;
+		if (!carry)
+		{
+			sum = in1 ^ in2;
+			carry = in1 & in2;
+			nn->digit = sum;
+			add_first(nn);
+			//display(head);
+		}
+		else
+		{
+			sum = !(in1 ^ in2);
+			carry = in1 | in2;
+			nn->digit = sum;
+			add_first(nn);
+		}
+		end1 = end1->prev;
+		end2 = end2->prev;
+	}
+	if (!carry)
+	{
+		display(head);
+	}
+	else
+	{
+		node* nnn = new node;
+		nnn->digit = carry;
+		add_first(nnn);
+		display(head);
+	}
+}
+int main()
+{
+	dll a;
+	int num, num2;
+	cout << "Enter integer number" << endl;
+	cin >> num;
+	int c1 = a.binget(num);
+	cout << "Total digits " << c1 << endl;
+
+	dll b;
+	cout << "1s complement" << endl;
+	b.comp1(a.head);
+	b.display(b.head);
+	cout << "Original number binary" << endl;
+	a.display(a.head);
+
+	dll c;
+	cout << "2s complement" << endl;
+	c.comp2(b.tail);
+	c.display(c.head);
+	cout << "Original number binary" << endl;
+	a.display(a.head);
+
+	dll d;
+	cout << "Addition of 2 binary" << endl;
+	cout << "Enter 2nd integer" << endl;
+	cin >> num2;
+	cout << "B :" << endl;
+	int c2 = d.binget(num2);
+	cout << "Total digits " << c2 << endl;
+
+
+	cout << "A :" << endl;
+	a.display(a.head);
+
+	dll e;
+	cout << "Addition" << endl;
+	if (c1 == c2)
+	{
+		cout << "Result" << endl;
+		e.binary_add(a.tail, d.tail);
+	}
+	else if (c1 > c2)
+	{
+		int c = c1 - c2;
+		for (int i = 0; i < c; i++)
+		{
+			node* n1 = new node;
+			n1->digit = 0;
+			d.add_first(n1);
+		}
+		cout << "Number required for adding " << endl;
+		d.display(d.head);
+		cout << "Result" << endl;
+		e.binary_add(a.tail, d.tail);
+	}
+	else
+	{
+		int c0 = c2 - c1;
+		for (int i = 0; i < c0; i++)
+		{
+			node* n2 = new node;
+			n2->digit = 0;
+			a.add_first(n2);
+		}
+		cout << "Number required for adding " << endl;
+		a.display(a.head);
+		cout << "Result" << endl;
+		e.binary_add(a.tail, d.tail);
+	}
+	return 0;
+}
