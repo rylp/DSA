@@ -1,0 +1,192 @@
+// dsa_vanilla.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
+//do it by sll
+#include <iostream>
+using namespace std;
+class node
+{
+public:
+	string name;
+	int prn;
+	node* next;
+	node* prev;
+};
+class dll
+{
+public:
+	node* head;
+	node* tail;
+	dll()
+	{
+		tail=head = NULL;
+	}
+	//void add_first(node* nnf);
+	//void add_between(node *nnb);
+	void add_last(node* nnl);
+	int display(node* just);
+	void details(node* get);
+	void add_left(node* start);
+
+};
+void dll::details(node* get)
+{
+	cout << "Enter member details" << endl;
+	cout << "Name :";
+	cin >> get->name;
+	cout << "Number :";
+	cin >> get->prn;
+}
+/*void cll::add_first(node *nnf)
+{
+
+	if (head == NULL)
+	{
+		head = nnf;
+		nnf->next = nnf;
+		nnf->prev = nnf;
+	}
+	else
+	{
+		nnf->next = head;
+		head->prev = nnf;
+		nnf->prev = NULL;
+		head = nnf;
+	}
+}*/
+void dll::add_last(node* nnl)
+{
+	if (head == NULL)
+	{
+		head =tail = nnl;
+		tail->next = NULL;
+		head->prev = NULL;
+	}
+	else
+	{
+		tail->next = nnl;
+		nnl->prev = tail;
+		tail = nnl;
+		tail->next = NULL;
+	}
+}
+int dll::display(node* just)
+{
+	int count = 0;
+
+	while (just!=NULL)
+	{
+		cout << just->name << endl;
+		cout << just->prn << endl;
+		just = just->next;
+		count++;
+	}
+	cout << "Total members " << count << endl;
+
+	return count;
+}
+void dll::add_left(node *start)
+{
+	int flag = 0;
+	node* temp = head;
+	while (start != NULL)
+	{
+		while (temp != NULL)
+		{
+			if (temp->prn == start->prn)
+			{
+				flag++;
+				break;
+			}
+			else
+			{
+				temp = temp->next;
+			}
+		}
+		if(flag==0)
+		{
+			node* n = new node;
+			n->name = start->name;
+			n->prn = start->prn;
+			n->next = NULL;
+			n->prev = NULL;
+			add_last(n);
+		}
+		start = start->next;
+		temp = head;
+		flag = 0;
+	}
+}
+int main()
+{
+	typedef int counter;
+	typedef int select;
+	counter c1, c2, c3;
+	select s1, s2, s3;
+	dll univ;
+	cout << "Enter all the members" << endl;
+
+	do
+	{
+		node* nn = new node;
+		univ.details(nn);
+		nn->next = NULL;
+		nn->prev = NULL;
+		univ.add_last(nn);
+		c1=univ.display(univ.head);
+		cout << "Enter 0 to stop" << endl;
+		cin >> s1;
+	} while (s1 != 0);
+
+	dll van;
+	cout << "Enter members who love vanilla" << endl;
+
+	do
+	{
+		node* nn = new node;
+		van.details(nn);
+		nn->next = NULL;
+		nn->prev = NULL;
+		van.add_last(nn);
+		c2=van.display(van.head);
+		cout << "Enter 0 to stop" << endl;
+		cin >> s2;
+	} while (s2 != 0);
+
+	dll bs;
+	cout << "Enter members who love butterscotch" << endl;
+
+	do
+	{
+		node* nn = new node;
+		bs.details(nn);
+		nn->next = NULL;
+		nn->prev = NULL;
+		bs.add_last(nn);
+		c3=bs.display(bs.head);
+		cout << "Enter 0 to stop" << endl;
+		cin >> s3;
+	} while (s3 != 0);
+
+	//cout << c1 << c2 << c3<<endl;
+
+	cout << "Students who like vanilla or bs or both" << endl;
+	dll d;
+	if (c2 > c3)
+	{
+		d = van;
+		d.add_left(bs.head);
+		d.display(d.head);
+	}
+	else
+	{
+		d = bs;
+		d.add_left(van.head);
+		d.display(d.head);
+	}
+	return 0;
+}
+
+
+// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
+// Debug program: F5 or Debug > Start Debugging menu
