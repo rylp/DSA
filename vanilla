@@ -1,7 +1,8 @@
-// dsa_vanilla.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
-
-//do it by sll
+//there seems to be a prob with intersection
+//test case that fails is univ:1 2 3 4 5 6 
+//van:1 2 4 6
+//bs:2 5 
 #include <iostream>
 using namespace std;
 class node
@@ -27,7 +28,7 @@ public:
 	int display(node* just);
 	void details(node* get);
 	void add_left(node* start);
-
+	void intersection(node* temp1, node* temp2);
 };
 void dll::details(node* get)
 {
@@ -87,10 +88,11 @@ int dll::display(node* just)
 }
 void dll::add_left(node *start)
 {
-	int flag = 0;
-	node* temp = head;
+
 	while (start != NULL)
 	{
+		int flag = 0;
+		node* temp = head;
 		while (temp != NULL)
 		{
 			if (temp->prn == start->prn)
@@ -113,8 +115,43 @@ void dll::add_left(node *start)
 			add_last(n);
 		}
 		start = start->next;
-		temp = head;
-		flag = 0;
+	}
+}
+void dll::intersection(node* temp1,node* temp2)
+{
+	node* temp3;
+	temp3= temp2;
+	while (temp1 != NULL)
+	{
+		int flag = 0;
+		temp2 = temp3;
+		while (temp2 != NULL)
+		{
+			if (temp1->prn == temp2->prn)
+			{
+				flag++;
+				break;
+			}
+			else
+			{
+				temp2 = temp2->next;
+			}
+		}
+		if (flag == 1)
+		{
+			node* n = new node;
+			n->name = temp1->name;
+			n->prn = temp1->prn;
+			//cout << temp1->name;
+			n->next = NULL;
+			n->prev = NULL;
+			add_last(n);
+			temp1 = temp1->next;
+		}
+		else
+		{
+			temp1 = temp1->next;
+		}
 	}
 }
 int main()
@@ -184,9 +221,14 @@ int main()
 		d.add_left(van.head);
 		d.display(d.head);
 	}
+
+	cout<<"Set of students who like both vanilla and butterscotch"<<endl;
+	dll e;
+	e.intersection(van.head,bs.head);
+	e.display(e.head);
+
+	cout<<"Set of students who like only vanilla not butterscotch "<< endl;
+
+
 	return 0;
 }
-
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
