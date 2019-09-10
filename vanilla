@@ -1,8 +1,10 @@
+// dsa_vanilla.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
-//there seems to be a prob with intersection
-//test case that fails is univ:1 2 3 4 5 6 
-//van:1 2 4 6
-//bs:2 5 
+//there seems to be a prob with intersection. it is working individually, but doesnt work when other functions are also enabled.
+//van and bs lls get changed during performing van or bs or both operation. copying needs to be done in a better way.
+//sapmle test case that fails is univ:1 2 3 4 
+//van:1 2 3
+//bs:2 4
 #include <iostream>
 using namespace std;
 class node
@@ -130,6 +132,7 @@ void dll::intersection(node* temp1,node* temp2)
 			if (temp1->prn == temp2->prn)
 			{
 				flag++;
+				//cout << flag << endl;
 				break;
 			}
 			else
@@ -139,19 +142,15 @@ void dll::intersection(node* temp1,node* temp2)
 		}
 		if (flag == 1)
 		{
-			node* n = new node;
-			n->name = temp1->name;
-			n->prn = temp1->prn;
+			node* nn = new node;
+			nn->name = temp1->name;
+			nn->prn = temp1->prn;
 			//cout << temp1->name;
-			n->next = NULL;
-			n->prev = NULL;
-			add_last(n);
-			temp1 = temp1->next;
+			nn->next = NULL;
+			nn->prev = NULL;
+			add_last(nn);
 		}
-		else
-		{
 			temp1 = temp1->next;
-		}
 	}
 }
 int main()
@@ -159,7 +158,7 @@ int main()
 	typedef int counter;
 	typedef int select;
 	counter c1, c2, c3;
-	select s1, s2, s3;
+	select s1, s2, s3,s4,s5;
 	dll univ;
 	cout << "Enter all the members" << endl;
 
@@ -190,6 +189,9 @@ int main()
 		cin >> s2;
 	} while (s2 != 0);
 
+	dll van2;
+	van2 = van;
+
 	dll bs;
 	cout << "Enter members who love butterscotch" << endl;
 
@@ -205,8 +207,46 @@ int main()
 		cin >> s3;
 	} while (s3 != 0);
 
-	//cout << c1 << c2 << c3<<endl;
+	dll bs2;
+	bs2 = bs;
 
+	//cout << c1 << c2 << c3<<endl;
+	/*do
+	{
+		cout << "CHOOSE" << endl;
+		cout << "1.Vanilla/BS or both 2.Both Van & BS" << endl;
+		cin >> s4;
+
+		switch (s4)
+		{
+		case 1:
+		{
+			cout << "Students who like vanilla or bs or both" << endl;
+			dll d;
+			if (c2 > c3)
+			{
+				d = van;
+				d.add_left(bs.head);
+				d.display(d.head);
+			}
+			else
+			{
+				d = bs;
+				d.add_left(van.head);
+				d.display(d.head);
+			}
+			break;
+		}
+		case 2: cout << "Set of students who like both vanilla and butterscotch" << endl;
+			dll e;
+			e.intersection(van.head, bs.head);
+			e.display(e.head);
+			break;
+		}
+		cout << "Enter 0 to exit" << endl;
+		cin >> s5;
+	} while (s5 != 0);
+	*/
 	cout << "Students who like vanilla or bs or both" << endl;
 	dll d;
 	if (c2 > c3)
@@ -222,13 +262,18 @@ int main()
 		d.display(d.head);
 	}
 
-	cout<<"Set of students who like both vanilla and butterscotch"<<endl;
+	van.display(van.head);
+
+	bs.display(bs.head);
+
+	/*cout<<"Set of students who like both vanilla and butterscotch"<<endl;
 	dll e;
 	e.intersection(van.head,bs.head);
-	e.display(e.head);
+	e.display(e.head);*/
 
-	cout<<"Set of students who like only vanilla not butterscotch "<< endl;
+	//cout<<"Set of students who like only vanilla not butterscotch "<< endl;
 
 
 	return 0;
 }
+
