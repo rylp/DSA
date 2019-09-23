@@ -1,0 +1,119 @@
+
+#include <iostream>
+#include<string>
+using namespace std;
+class stack
+{
+public:
+	int top;
+	char* array;
+	int size;
+	stack()
+	{
+		top = -1;
+	}
+	bool isMatching(char *exp);
+	void push(int n);
+	bool isempty();
+	void pop();
+};
+bool stack::isempty()
+{
+	if (top == -1)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+void stack::pop()
+{
+	int temp;
+	if (top != -1)
+	{
+		temp = array[top--];
+	}
+}
+bool stack::isMatching(char *exp)
+{
+	/*char exp[1000];
+	cout << "Enter expression" << endl;
+	cin.getline(exp, 1000);
+	int l = strlen(exp);
+	size = l;
+	array = new char[l];*/
+
+	for (int i = 0; exp[i] != '\0'; i++)
+	{
+		if (exp[i] == '(' || exp[i]=='{' || exp[i]=='[')
+		{
+			push(exp[i]);
+			cout << "Pushed" << endl;
+		}
+		else if (exp[i] == ')' || exp[i] == '}' || exp[i] == ']')
+		{
+			bool x = isempty();
+			if (x == false)
+			{
+				pop();
+				cout << "Popped" << endl;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}
+	bool y = isempty();
+	if (y == true)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+void stack::push(int n)
+{
+	if (top == size - 1)
+	{
+		cout << "Full Stack" << endl;
+	}
+	else
+	{
+		array[++top] = n;
+	}
+}
+int main()
+{
+	int n;
+    stack st;
+	do
+	{
+		char exp[1000];
+		cout << "Enter expression" << endl;
+		cin.getline(exp, 1000);
+		int l = strlen(exp);
+		st.size = l;
+		st.array = new char[l];
+		bool dec = st.isMatching(exp);
+
+		if (dec == true)
+		{
+			cout << "Parenthesis Match" << endl;
+		}
+		else
+		{
+			cout << "No match" << endl;
+		}
+
+		cout << "Enter 0 to exit" << endl;
+		cin >> n;
+
+	} while (n != 0);
+
+	return 0;
+}
