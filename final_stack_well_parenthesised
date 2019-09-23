@@ -2,6 +2,8 @@
 //
 //do-while loop not working
 //proper well paranthesis matching
+// infix_postfix.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
 #include <iostream>
 #include<string>
 using namespace std;
@@ -15,8 +17,8 @@ public:
 	{
 		top = -1;
 	}
-	bool isMatching(char *exp);
-	void push(int n);
+	bool isMatching(char* exp);
+	void push(char n);
 	bool isempty();
 	void pop();
 	char tops();
@@ -40,7 +42,7 @@ void stack::pop()
 		temp = array[top--];
 	}
 }
-bool stack::isMatching(char *exp)
+bool stack::isMatching(char* exp)
 {
 	/*char exp[1000];
 	cout << "Enter expression" << endl;
@@ -51,10 +53,9 @@ bool stack::isMatching(char *exp)
 
 	for (int i = 0; exp[i] != '\0'; i++)
 	{
-		if (exp[i] == '(' || exp[i]=='{' || exp[i]=='[')
+		if (exp[i] == '(' || exp[i] == '{' || exp[i] == '[')
 		{
 			push(exp[i]);
-			cout << "Pushed" << endl;
 		}
 		else if (exp[i] == ')')
 		{
@@ -98,7 +99,7 @@ bool stack::isMatching(char *exp)
 
 			}
 		}
-		else if (exp[i] == ']') 
+		else if (exp[i] == ']')
 		{
 			bool x = isempty();
 			if (x == true)
@@ -139,7 +140,7 @@ char stack::tops()
 	}
 	return temp;
 }
-void stack::push(int n)
+void stack::push(char n)
 {
 	if (top == size - 1)
 	{
@@ -153,13 +154,13 @@ void stack::push(int n)
 int main()
 {
 	int n;
-    stack st;
+	stack st;
 	do
 	{
 		char exp[1000];
 		cout << "Enter expression" << endl;
 		cin.getline(exp, 1000);
-		int l = strlen(exp); 
+		int l = strlen(exp);
 		st.size = l;
 		st.array = new char[l];
 		bool dec = st.isMatching(exp);
@@ -180,3 +181,6 @@ int main()
 
 	return 0;
 }
+// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
+// Debug program: F5 or Debug > Start Debugging menu
+
