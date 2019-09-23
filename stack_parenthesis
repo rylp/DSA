@@ -1,4 +1,4 @@
-
+//do while is not working
 #include <iostream>
 #include<string>
 using namespace std;
