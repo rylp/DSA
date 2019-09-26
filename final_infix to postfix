@@ -21,6 +21,8 @@
 //PLUS in main
 //st.array=new char(or int)[length];
 //st.size=length;
+//in char arrays--- use !='\0' as conditioner
+//BUT , in int array use <=count as conditioner
 #include <iostream>
 #include<string.h>
 using namespace std;
