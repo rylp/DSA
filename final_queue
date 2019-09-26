@@ -1,0 +1,116 @@
+// queue.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+//queue using linked list is pretty do-able
+//create a simple sll with node class and sll class
+//get head and tail ptr
+//IMP
+//queue empty:- (head=null)
+//queue full:- node *p=new node;
+//				if(p==NULL)
+//deq is to delete element from front
+//enq is to insert element from back
+#include <iostream>
+using namespace std;
+class node
+{
+public:
+	int data;
+	node* next;
+};
+class sll
+{
+public:
+	node* head;
+	node* tail;
+	sll()
+	{
+		head = tail = NULL;
+	}
+	void enq(int n);
+	int deq();
+	void display(node* start);
+};
+void sll::enq(int n)
+{
+	node* nn = new node;
+	if (nn == NULL)
+	{
+		cout << "Queue Full" << endl;
+	}
+	nn->data = n;
+	nn->next = NULL;
+	if(head==NULL)
+	{
+		head = tail = nn;
+	}
+	else
+	{
+		tail->next = nn;
+		tail = nn;
+	}
+}
+int sll::deq()
+{
+	int x = -1;
+	if (head == NULL)
+	{
+		cout << "Queue Empty" << endl;
+	}
+	node* p = head;
+	head = head->next;
+	x=p->data;
+	delete(p);
+
+	return x;
+}
+void sll::display(node* start)
+{
+	while (start != NULL)
+	{
+		cout << start->data << endl;
+		start = start->next;
+	}
+}
+int main()
+{
+	int select;
+	sll q;
+	do
+	{
+		int x;
+		cout << "Enter 1.Inserting in Queue 2.Deleting from Queue 3.Display" << endl;
+		cin >> x;
+
+		switch (x)
+		{
+		case 1:
+		{
+			int num;
+			cout << "Insert" << endl;
+			cout << "Enter Element" << endl;
+			cin >> num;
+			q.enq(num);
+			break;
+		}
+		case 2:
+		{
+			cout << "Delete" << endl;
+			int del = q.deq();
+			cout << "Deleted element is " << del << endl;
+			break;
+		}
+		case 3:
+		{
+			cout << "Display" << endl;
+			q.display(q.head);
+			break;
+		}
+		}
+
+		cout << "Enter 0 to stop" << endl;
+		cin >> select;
+	} while (select != 0);
+
+	return 0;
+}
+
