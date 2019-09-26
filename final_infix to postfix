@@ -17,6 +17,7 @@
 //int size;
 //char(or int)*array;
 //stack() {top=-1;}
+);
 //PLUS in main
 //st.array=new char(or int)[length];
 //st.size=length;
