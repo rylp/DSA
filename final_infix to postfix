@@ -1,21 +1,29 @@
-//============================================================================
-// Name        : infix.cpp
-// Author      : ryl
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
-//============================================================================
-//we need to push (#) first
+//we need to push (#) first.
 //create a isoperand and pre function
 //change slightly the isempty() to get perfect result
 //code is imp and tricky
 // +,- --> 1
 //*,/ --> 2
 //#---> -1
+//I havent included ^ and ( right now
+//also try for dealing with a string rather than array.
+//2 stacks need to be made. One int stack and other char stack. so, 2 stack classes.
+//try to avoid going into the loop thru a !='\0' conditioning for a int type of array.
+//Most importantly,
+//To start of a any stack
+//class stack
+//(
+//int top;
+//int size;
+//char(or int)*array;
+//stack() {top=-1;}
+//PLUS in main
+//st.array=new char(or int)[length];
+//st.size=length;
 #include <iostream>
 #include<string.h>
 using namespace std;
-class stack
+class stack /*This is a char stack for converting to infix expresion*/
 {
 public:
 	int top;
@@ -26,7 +34,7 @@ public:
 		top = -1;
 	}
 	char* convert(char* exp);
-	void push(int n);
+	void push(char n);
 	char pop();
 	char tops();
 	int pre(char x);
@@ -101,7 +109,7 @@ char stack::tops()
 	char temp = array[top];
 	return temp;
 }
-void stack::push(int n)
+void stack::push(char n)
 {
 	if (top == size - 1)
 	{
@@ -133,10 +141,117 @@ char stack::pop()
 	}
 	return temp;
 }
+class stack2 /*This is a int stack for evaluating postfix expresion*/
+{
+public:
+	int top;
+	int* arr;
+	int size;
+	stack2()
+	{
+		top = -1;
+	}
+	int evaluate(char* eval,int len);
+	int calc(int lo, int ro, char sign);
+	void push(int n);
+	int pop();
+	int tops();
+	bool isoperand(char y);
+	//bool isempty(); not reqd
+};
+int stack2::evaluate(char* eval,int len)
+{
+	int* values = new int[len + 1];
+	int c = 0;
+	for (int i = 0; eval[i]!='\0'; i++) // created an array only for values of the operands
+	{
+		if (isoperand(eval[i]))
+		{
+			cout << "Enter value for " << eval[i] << endl;
+			cin >> values[c++];
+		}
+	}
+
+	int s = 0;
+	for (int i = 0; eval[i] != '\0'; i++)//whenevr we came acros opernd in postfix,we take elem frm int array('values[i]')& operate on it.
+	{
+		if (isoperand(eval[i]))
+		{
+			push(values[s++]);//a diff s needs to be there n incremented seperately than 'i'
+		}
+		else
+		{
+			int x = pop();
+			int y = pop();
+			int z = calc(y, x,eval[i]);//remeber the first popped ele is right operand(ro)
+			push(z);
+		}
+	}
+	int result = tops();//tops will contain result at the end.
+	cout << result << endl;
+	return result;
+}
+int stack2::calc(int lo, int ro,char sign)
+{
+	if (sign == '+')
+	{
+		return (lo + ro);
+	}
+	else if (sign == '-')
+	{
+		return (lo - ro);
+	}
+	else if (sign == '*')
+	{
+		return (lo * ro);
+	}
+	else if (sign == '/')
+	{
+		return (lo / ro);
+	}
+	return 0;
+}
+bool stack2::isoperand(char y)
+{
+	if (y == '+' || y == '-' || y == '*' || y == '/')
+	{
+		return false;
+	}
+	return true;
+}
+void stack2::push(int n)
+{
+
+	if (top == size - 1)
+	{
+		cout << "Stack Full" << endl;
+	}
+	else
+	{
+		arr[++top] = n;
+	}
+}
+int stack2::pop()
+{
+	int temp;
+	if (top == -1)
+	{
+		cout << "Empty stack" << endl;
+	}
+	else
+	{
+		temp = arr[top--];
+	}
+	return temp;
+}
+int stack2::tops()
+{
+	int tempo = arr[top];
+	return tempo;
+}
 int main()
 {
 	stack st;
-
 	char exp[1000];
 	cout << "Enter infix expression" << endl;
 	cin.getline(exp, 1000);
@@ -145,10 +260,19 @@ int main()
     st.array = new char[l+1];
 
 	char *expc = st.convert(exp);
-
+	cout << "Postfix expression: " << endl;
 	for (int i = 0; expc[i] != '\0'; i++)
 	{
 		cout << expc[i];
 	}
+	cout << endl;
+
+	stack2 stk;
+	stk.arr = new int[l+1];
+	stk.size = l;
+	cout << "Result : " << endl;
+	int res = stk.evaluate(expc, l);
+	cout << res << endl;
+
 	return 0;
 }
