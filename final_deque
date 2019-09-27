@@ -1,0 +1,162 @@
+// dequeue.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+//Its a easy to understand . difficult to comprehend kinda code
+//create array type class.
+//and create dynamic array acc to size.
+//remember that tail pointer points to last ele
+//but head ptr points to 1 location behind ele placed.
+//We have 4 functions.
+//insert front is tedious.
+//int it we have 4 conditions
+//1.DQ Full
+//2.DQ Empty
+//3.Next ele of head is not NULL. So, shifting reqd
+//4. Next ele of head is NULL. just placing req.
+#include <iostream>
+using namespace std;
+class deque
+{
+public:
+	int size;
+	int* arr;
+	int head;
+	int tail;
+	deque()
+	{
+		head = tail = -1;
+	}
+	void insert_front(int n);
+	void insert_back(int k);
+	int del_front();
+	int del_back();
+	void display();
+};
+void deque::display()
+{
+	for (int i = head+1; i <= tail; i++)
+	{
+		cout << arr[i] << endl;
+	}
+}
+void deque::insert_back(int n)
+{
+	if (tail == size - 1)
+	{
+		cout << "DEQueue Full" << endl;
+	}
+	else
+	{
+		arr[++tail] = n;
+	}
+}
+void deque::insert_front(int k)//4 conditions
+{
+	if (tail == size - 1)
+	{
+		cout << "DEQueue Full" << endl;
+	}
+	else if (head == tail == -1)
+	{
+		arr[++tail] = k;
+	}
+	else if(arr[head+1]!=NULL)
+	{
+		for (int i = tail; i > head; i--)
+		{
+			arr[i + 1] = arr[i];
+		}
+		arr[head+1] = k;
+		tail++;
+	}
+	else
+	{
+		arr[head--] = k;
+	}
+}
+int deque::del_back()
+{
+	int temp = 0;
+	if (head==-1 && tail==-1)//this is a very imp clarification. cant write(head==tail==-1)
+	{
+		cout << "DEQueue Empty" << endl;
+		return -1;
+	}
+	else
+	{
+		temp = arr[tail--];
+	}
+	return temp;
+}
+int deque::del_front()
+{
+	int temp = 0;
+	if (head ==-1 && tail==-1)
+	{
+		cout << "DEQueue Empty" << endl;
+		return -1;
+	}
+	else
+	{
+		temp = arr[++head];
+	}
+	return temp;
+}
+int main()
+{
+	int x, sel;
+	deque dq;
+	cout << "Enter size" << endl;
+	cin >> dq.size;
+	dq.arr = new int[dq.size];
+	do
+	{
+		cout << "Enter 1.Insert Front 2.Insert Back 3.Delete Front 4.Delete Back 5.Display"<<endl;
+		cin >> sel;
+
+		switch (sel)
+		{
+			case 1:
+			{
+				int num;
+				cout << "Enter element to be inserted" << endl;
+				cin >> num;
+				dq.insert_front(num);
+				break;
+			}
+			case 2:
+			{
+				int num;
+				cout << "Enter element to be inserted" << endl;
+				cin >> num;
+				dq.insert_back(num);
+				break;
+			}
+			case 3:
+			{
+				int del = dq.del_front();
+				if(del!=-1)
+				cout << "Deleted element is " << del << endl;
+				break;
+			}
+			case 4:
+			{
+				int del = dq.del_back();
+				if(del!=-1)
+				cout << "Deleted element is " << del << endl;
+				break;
+			}
+			case 5:
+			{
+				dq.display();
+				break;
+			}
+		}
+
+		cout << "Enter 0 to exit" << endl;
+		cin >> x;
+	} while (x != 0);
+	return 0;
+}
+
+
+
