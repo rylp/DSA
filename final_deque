@@ -12,6 +12,7 @@
 //2.DQ Empty
 //3.Next ele of head is not NULL. So, shifting reqd
 //4. Next ele of head is NULL. just placing req.
+//display function is tricky. use (i=head+1;i<=tail;i++)
 #include <iostream>
 using namespace std;
 class deque
@@ -61,12 +62,12 @@ void deque::insert_front(int k)//4 conditions
 	}
 	else if(arr[head+1]!=NULL)
 	{
-		for (int i = tail; i > head; i--)
+		for (int i = tail; i > head; i--)//decrement from tail to head+1 and shift right
 		{
 			arr[i + 1] = arr[i];
 		}
 		arr[head+1] = k;
-		tail++;
+		tail++;//here after shifting tail ptr need to be moved
 	}
 	else
 	{
