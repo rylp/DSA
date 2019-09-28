@@ -14,7 +14,7 @@
 //4. Next ele of head is NULL. just placing req.
 //look at display fn.. do (i=head+1;i<=tail;i++)
 //tail++ has to be done in shift condn in insert_front
-
+//keep cout head tail size to verify whats goin wrong
 #include <iostream>
 using namespace std;
 class deque
