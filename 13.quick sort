@@ -7,8 +7,8 @@
 using namespace std;
 void quicksort(int a[], int l, int h)
 {
-	int pivot = a[l];
-	int i = l;
+	int pivot = a[l];//really imp to write a[l] and not a[0] here
+	int i = l;//assign one ahead or before for do while to work
 	int j = h + 1;
 
 	while (i < j)
@@ -25,14 +25,14 @@ void quicksort(int a[], int l, int h)
 
 		} while (a[j] > pivot);
 
-		if (i < j)
+		if (i < j)//essential
 		{
 			swap(a[i], a[j]);
 		}
 	}
-	swap(a[j], a[l]);
+	swap(a[j], a[l]);//essential to swap a[l] and a[j] n not a[j] and pivot.
 
-	if (i != j)
+	if (i != j)//imp condn
 	{
 		quicksort(a, l, j - 1);
 		quicksort(a, j + 1, h);
