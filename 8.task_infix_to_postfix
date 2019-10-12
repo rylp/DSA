@@ -1,0 +1,164 @@
+// infix_postfix_2.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
+//Evaluation part is left.
+
+//To form the skeleton, use 
+//1. (a*b+c)
+//2. (a*b)^(c-d)
+
+//after entering while, 3 questions
+//Q1. Is it alphabet or not(if-else block)
+//Q2. Is it empty stack or not(if-else block)
+//Q3. Is it closing bracket ')' or not (if-else block)
+
+//IMP. Points
+//1. Providing '\0' to the last post[j] when exiting function.
+//2. Proper increment of top and j at regular places
+//3. Incrementing i++ at the end just before while.
+//4. Using p1>p2 block and p1<=p2 madhe writting
+//    writing it as ( ins(stack[top]) >= pr1 )
+//5. Writing properly the inc and ins functions.
+//    prototype: int inc/ins (char ch)
+//6. Priority table.
+//    Operator  Incoming  Instack
+//      +,-			1		 1
+//      *,/			2		 2
+//		 ^			3		 3
+//		 (			4		 0
+//		 )			0		 0
+
+//refer task compusys book
+
+#include <iostream>
+using namespace std;
+
+int inc(char ch)//providing incoming priority.
+{
+	if (ch == '+' || ch == '-')
+		return 1;
+
+	else if (ch == '*' || ch == '/')
+		return 2;
+
+	else if (ch == '^')
+		return 3;
+
+	else if (ch == '(')
+		return 4;
+
+	else if (ch == ')')
+		return 0;
+
+	return -1;
+}
+int ins(char ch)//providing in-stack priority.
+{
+	if (ch == '+' || ch == '-')
+		return 1;
+
+	else if (ch == '*' || ch == '/')
+		return 2;
+
+	else if (ch == '^')
+		return 3;
+
+	else if (ch == '(')
+		return 0;
+
+	else if (ch == ')')
+		return 0;
+
+	return -1;
+}
+void convert(char in[20], char post[20])
+{
+	char stack[20];//stack init
+	int top = -1;//top init for stack
+	int i=0, j=0;
+	char ch;//to denote the specific char
+
+	while (in[i] != '\0')//it is \0(zero)
+	{
+		ch = in[i];
+		if (ch>='a' &&  ch<='z')//if it is alphabet
+		{
+			post[j] = ch;
+			j++;
+		}
+		else
+		{
+			/* it is surely operator like: +,-,/,*,^,(,) */
+			if (top==-1)
+			{
+				//push into stack.
+				top++;
+				stack[top] = ch;
+			}
+			else
+			{
+				/*stack is not empty*/
+				if (ch==')')
+				{
+					//till the point that we reached the opening bracket '(' all the things were popped.
+					//Imp to note that the  opening bracket '(' itself is not popped into post[j]
+					while (stack [top] != '(')
+					{
+						post[j] = stack[top];
+						top--;//imp to know
+						j++;//imp to know
+					}
+					top--;
+				}
+				else
+				{
+					int pr1 = inc(ch);
+					int pr2 = ins(stack[top]);
+
+						if (pr1 > pr2)
+						{
+							//push into stack
+							top++;
+							stack[top] = ch;
+						}
+						else
+						{
+							//now unti and unless inc>ins, keep popping out and check one after other.
+
+							while ( ins(stack[top]) >= pr1)
+							{
+								post[j] = stack[top];
+								top--;
+								j++;
+							}
+
+							top++;
+							stack[top] = ch;
+
+						}
+				}
+			}
+		}
+		i++;
+	}
+	while (top != -1)//popping out whatever is left from stack till it becomes empty.
+	{
+		post[j] = stack[top];
+		j++;
+		top--;
+	}
+	post[j] = '\0';//this is extremely crucial . otherwise it will not understand where to stop.
+}
+int main()
+{
+	char in[20], post[20];
+	cout << "Enter infix expression" << endl;
+	cin >> in;
+	cout << "Converting infix to postfix" << endl;
+	convert(in, post);
+	cout << "Postfix expression" << endl;
+	cout << post << endl;
+	return 0;
+}
+
+
