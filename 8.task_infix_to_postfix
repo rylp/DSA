@@ -1,7 +1,4 @@
 // infix_postfix_2.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
-//Evaluation part is left.
 
 //To form the skeleton, use 
 //1. (a*b+c)
@@ -24,9 +21,14 @@
 //    Operator  Incoming  Instack
 //      +,-			1		 1
 //      *,/			2		 2
-//	 ^			3		 3
+//	^			3		 3
 //	(			4		 0
 //	)			0		 0
+
+
+//For evaluation create 
+//1. int solve(char post[]);
+//2. int eval(int op1,char ch,int op2)
 
 //refer task compusys book
 
@@ -149,6 +151,58 @@ void convert(char in[20], char post[20])
 	}
 	post[j] = '\0';//this is extremely crucial . otherwise it will not understand where to stop.
 }
+int eval(int op1, char ch, int op2)//get this value acc to operator and push it again into stack
+{
+	if (ch == '+')
+		return (op1 + op2);
+
+	else if (ch == '-')
+		return (op1 - op2);
+
+	else if (ch == '*')
+		return (op1 * op2);
+
+	else if (ch == '/')
+		return (op1 / op2);
+
+	return -1;
+}
+int solve(char post[])
+{
+	int stack[20];//stack init
+	int top = -1;//stack init
+	char ch;
+	int op1, op2;
+	int i = 0;
+	int val;
+
+	while (post[i] != '\0')
+	{
+		ch = post[i];
+
+		if (ch >= 'a' && ch <= 'z')//if it is an alphabet enter its value and push into stack unconditionally.
+		{
+			cout << "Enter value of " << ch << endl;
+			cin >> val;
+			top++;
+			stack[top] = val;
+		}
+		else//if not pop out the top 2, perform result and again push into stack
+		{
+			int op2 = stack[top];
+			top--;
+			int op1 = stack[top];
+			top--;
+
+			val = eval(op1, ch, op2);
+
+			top++;
+			stack[top] = val;
+		}
+		i++;
+	}
+	return (stack[top]);//finally the ans is in the top of stack. so return it.
+}
 int main()
 {
 	char in[20], post[20];
@@ -158,7 +212,8 @@ int main()
 	convert(in, post);
 	cout << "Postfix expression" << endl;
 	cout << post << endl;
+	cout << "Evaluate expression" << endl;
+	int result = solve(post);
+	cout << result << endl;
 	return 0;
 }
-
-
