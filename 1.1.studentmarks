@@ -1,0 +1,116 @@
+//No use of class
+//pretty straightfrwd
+//Most freq marks is tricky
+
+//take 2 loops 
+//2 counts: count and prev_count
+//2 variabled: float temp;float freq;
+
+#include<iostream>
+using namespace std;
+
+void getdata(float a[], int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		cout << "Enter Student" << i + 1 << " marks" << endl;
+		cin >> a[i];
+	}
+}
+
+float highest(float a[], int n)
+{
+	float temp = a[0];
+	for (int i = 0; i < n; i++)
+	{
+		if (a[i] > temp)
+			temp = a[i];
+	}
+	return temp;
+}
+
+float lowest(float a[], int n)
+{
+	float temp = a[0];
+
+	for (int i = 0; i < n; i++)
+	{
+		if (temp > a[i])
+			temp = a[i];
+	}
+	return temp;
+}
+
+float average(float a[], int n, int total)
+{
+	float sum = 0;
+	for (int i = 0; i < n; i++)
+	{
+		sum = sum + a[i];
+	}
+	float avrg;
+	avrg = sum / total;
+
+	return avrg;
+}
+
+float freq(float a[], int n)
+{
+	int count=0;
+	int prev_count=0;
+	float freq=0;
+	float temp=0;
+
+	for (int i = 0; i < n; i++)
+	{
+		count = 0;
+		freq = a[i];
+		for (int j = 0; j < n; j++)
+		{
+			if (freq == a[j])
+				count++;
+		}
+		if (count > prev_count)
+		{
+			temp = a[i];
+			prev_count = count;
+		}
+	}
+	if (prev_count == 1)
+	{
+		return -1;
+	}
+	else
+		return temp;
+}
+
+int main()
+{
+	float a[1000];
+	int total,n;
+	cout << "Enter total number of students in class" << endl;
+	cin >> total;
+	cout << "Enter number of present students in class" << endl;
+	cin >> n;
+
+	getdata(a, n);
+
+	float avrg = average(a, n, total);
+	cout << "Average is : " << avrg << endl;
+
+	float high = highest(a, n);
+	cout << "Highest Score is: " << high << endl;
+
+	float low = lowest(a, n);
+	cout << "Lowest Score is: " << low << endl;
+
+	float most = freq(a, n);
+	if (most != -1)
+		cout << "Most Frequent Score is: " << most << endl;
+	else
+		cout << "All Marks are Distinct" << endl;
+
+	cout << "Absent Students are :" << total - n << endl;
+
+	return 0;
+}
