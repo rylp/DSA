@@ -1,205 +1,201 @@
-// dequeue.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
 //Its a easy to understand . difficult to comprehend kinda code
+
 //create array type class.
-//and create dynamic array acc to size.
+//members of class deque are
+//1. int *arr;
+//2. int head;
+//3.int tail;
+//4.int size;
+
+//and create dynamic array acc to size in main()
+//By deque dq;
+//   dq.arr=new int[dq.size];
 //remember that tail pointer points to last ele
 //but head ptr points to 1 location behind ele placed.
+
+//For every thing, have formulation by 5 things
+//1.Empty 2. Full 3.Backspacing 4.Frontspacing 5.Midspacing
+
 //We have 4 functions.
 //insert front is tedious.
 //int it we have 4 conditions
 //1.DQ Full ie (tail=size-1 && head==-1)
 //2.DQ Empty ie (head ==-1 && tail==-1)
-//3.Next ele of head is not NULL. So, shifting reqd
-//4. Next ele of head is NULL. just placing req.
+//3.Frontspace and midspace together
+//4.Backspacing(shifting reqd. rememeber tail++ in that).
+
 //look at display fn.. do (i=head+1;i<=tail;i++)
+
 //tail++ has to be done in shift condn in insert_front
 //keep cout head tail size to verify whats goin wrong
+
 #include <iostream>
 using namespace std;
 class deque
 {
 public:
-	int size;
 	int* arr;
 	int head;
 	int tail;
+	int size;
+public:
 	deque()
 	{
 		head = tail = -1;
 	}
-	void insert_front(int n);
-	void insert_back(int k);
-	int del_front();
-	int del_back();
+	void ins_front(int n);
+	void ins_back(int n);
+	void del_front();
+	void del_back();
 	void display();
 };
-void deque::display()
+void deque::ins_front(int n)
 {
-	for (int i = head+1; i <= tail; i++)
-	{
-		cout << arr[i] << endl;
-	}
-}
-void deque::insert_back(int n)
-{
-	cout << "head" << head << endl;
-	cout << "tail" << tail << endl;
-	cout << "Size" << size << endl;
 
-	if (tail == size - 1 && head==-1)
+	if (head == -1 && tail == -1)//empty
 	{
-		cout << "DEQueue Full" << endl;
-	}
-	else
-	{
-		arr[++tail] = n;
+		cout << "---Inserting in empty array---" << endl;
+		tail++;
+		arr[tail] = n;
 	}
 
-	cout << "head" << head << endl;
-	cout << "tail" << tail << endl;
-	cout << "Size" << size << endl;
-}
-void deque::insert_front(int k)//4 conditions
-{
-	cout << "head" << head << endl;
-	cout << "tail" << tail << endl;
-	cout << "Size" << size << endl;
+	else if (head == -1 && tail == size - 1)//full
+	{
+		cout << "---Array Full. Cant Insert---" << endl;
+	}
 
-	if (tail == size - 1 && head==-1)
+	else if (head == -1 && tail != size - 1)//back-space
 	{
-		cout << "DEQueue Full" << endl;
-	}
-	else if (head ==-1 && tail == -1)
-	{
-		arr[++tail] = k;
-	}
-	else if(arr[head+1]!=NULL && tail!=size-1)
-	{
-		for (int i = tail; i > head; i--)
+		int i;
+		for (i = tail; i != head; i--)
 		{
 			arr[i + 1] = arr[i];
 		}
-		arr[head+1] = k;
+		arr[i+1] = n;
 		tail++;
+		cout << "---Inserted---" << endl;
 	}
-	else
+	else//front-space & mid-space
 	{
-		arr[head--] = k;
+		arr[head--] = n;
+		cout << "---Inserted---" << endl;
 	}
-
-	cout << "head" << head << endl;
-	cout << "tail" << tail << endl;
-	cout << "Size" << size << endl;
 }
-int deque::del_back()
+void deque::ins_back(int n)
 {
-	cout << "head" << head << endl;
-	cout << "tail" << tail << endl;
-	cout << "Size" << size << endl;
-
-	int temp = 0;
-	if (head==-1 && tail==-1)//this is a very imp clarification. cant write(head==tail==-1)
+	if (head == -1 && tail == size - 1)//full
 	{
-		cout << "DEQueue Empty" << endl;
-		return -1;
-	}
-	else
-	{
-		temp = arr[tail--];
+		cout << "---Cant Insert. Already Full" << endl;
 	}
 
-	cout << "head" << head << endl;
-	cout << "tail" << tail << endl;
-	cout << "Size" << size << endl;
-
-	return temp;
+	else if (head != -1 && tail == size - 1)//frontspace
+	{
+		int i;
+		for( i = head; i != tail; i++)
+		{
+			arr[i] = arr[i + 1];
+		}
+		arr[i] = n;
+		head--;
+		cout << "---Inserted---" << endl;
+	}
+	else//empty+backspace+midspace
+	{
+		tail++;
+		arr[tail] = n;
+		cout << "---Inserted---" << endl;
+	}
 }
-int deque::del_front()
+void deque::del_front()
 {
-	cout << "head" << head << endl;
-	cout << "tail" << tail << endl;
-	cout << "Size" << size << endl;
-
-	int temp = 0;
-	if (head ==-1 && tail==-1)
+	if (head == -1 && tail == -1)//empty
 	{
-		cout << "DEQueue Empty" << endl;
-		return -1;
+		cout << "---Nothing to Delete---" << endl;
 	}
-	else
+	else//full,backspc,frontspc,midspc.
 	{
-		temp = arr[++head];
+		head++;
+		cout << "---Deleted at front---" << endl;
 	}
-
-	cout << "head" << head << endl;
-	cout << "tail" << tail << endl;
-	cout << "Size" << size << endl;
-
-	return temp;
 }
+void deque::del_back()
+{
+	if (head == -1 && tail == -1)//empty
+	{
+		cout << "---Nothing to Delete---" << endl;
+	}
+	else//full,backspc,frontspc,midspc.
+	{
+		tail--;
+		cout << "---Deleted at end---" << endl;
+	}
+}
+void deque::display()
+{
+	for (int i = head + 1; i <= tail; i++)
+	{
+		cout << arr[i] << " " << endl;
+	}
+}
+
 int main()
 {
-	int x, sel;
+	int ch;
+	int ele, e;
 	deque dq;
-
-	cout << "Enter size" << endl;
+	cout << "Enter Size" << endl;
 	cin >> dq.size;
 
 	dq.arr = new int[dq.size];
 
 	do
 	{
-		cout << "Enter 1.Insert Front 2.Insert Back 3.Delete Front 4.Delete Back 5.Display"<<endl;
-		cin >> sel;
+		cout << "Select Your Choice" << endl;
+		cout << "\n\t1.Insert at start" << endl;
+		cout << "\n\t2.Insert at end" << endl;
+		cout << "\n\t3.Delete at start" << endl;
+		cout << "\n\t4.Delete at end" << endl;
+		cout << "\n\t5.Display" << endl;
+		cout << "\n\t6.Exit" << endl;
+		cin >> ch;
 
-		switch (sel)
+		switch (ch)
 		{
-			case 1:
-			{
-				int num;
-				cout << "Enter element to be inserted" << endl;
-				cin >> num;
-				dq.insert_front(num);
-				break;
-			}
-			case 2:
-			{
-				int num;
-				cout << "Enter element to be inserted" << endl;
-				cin >> num;
-				dq.insert_back(num);
-				break;
-			}
-			case 3:
-			{
-				int del = dq.del_front();
-				if(del!=-1)
-				cout << "Deleted element is " << del << endl;
-				break;
-			}
-			case 4:
-			{
-				int del = dq.del_back();
-				if(del!=-1)
-				cout << "Deleted element is " << del << endl;
-				break;
-			}
-			case 5:
-			{
-				dq.display();
-				break;
-			}
+		case 1:
+			cout << "Enter element to be inserted" << endl;
+			cin >> ele;
+			dq.ins_front(ele);
+			break;
+
+		case 2:
+			cout << "Enter element to be inserted" << endl;
+			cin >> e;
+			dq.ins_back(e);
+			break;
+
+		case 3:
+			dq.del_front();
+			break;
+
+		case 4:
+			dq.del_back();
+			break;
+
+		case 5:
+			dq.display();
+			break;
+
+		case 6:
+			cout << "\n\tThank You !!!" << endl;
+			break;
+
+		default:cout << "Invalid Option" << endl;
 		}
 
-		cout << "Enter 0 to exit" << endl;
-		cin >> x;
-	} while (x != 0);
+	} while (ch != 6);
+
+	cout << "\n\t Exit!!!" << endl;
+
 	return 0;
 }
-
-
-
-
-
 
