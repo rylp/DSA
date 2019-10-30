@@ -1,116 +1,152 @@
-// queue.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-//queue using linked list is pretty do-able
-//create a simple sll with node class and sll class
-//get head and tail ptr
 //IMP
 //queue empty:- (head=null)
-//queue full:- node *p=new node;
-//				if(p==NULL)
 //deq is to delete element from front
 //enq is to insert element from back
-#include <iostream>
+
+//Make a singly linked list by class node and class ll
+//Make data memebers private and use friend class ll; in node class.
+//In class ll, have only head
+//
+//Member fns:
+//void ins(int n);
+//void del();
+//void disp();
+//bool isempty();
+
+//create node* nn=new node;
+//nn->prn=n;
+//nn->next=NULL; in insert fn
+
+//in insert:
+//1. check if empty, if yes just do head=nn;
+//2. if not, have while loop to reach end of list n then insert.
+
+//in delete:
+//1.check if empty, display del not possible
+//2. if not, delete.
+
+#include<iostream>
 using namespace std;
 class node
 {
-public:
-	int data;
+	int prn;
 	node* next;
-};
-class sll
-{
 public:
-	node* head;
-	node* tail;
-	sll()
+	node()
 	{
-		head = tail = NULL;
+		prn = 0;
 	}
-	void enq(int n);
-	int deq();
-	void display(node* start);
+	friend class ll;
 };
-void sll::enq(int n)
+class ll
+{
+	node* head;
+public:
+	ll()
+	{
+		head = NULL;
+	}
+	void ins(int n);
+	void del();
+	void disp();
+	bool isempty();
+};
+bool ll::isempty()
+{
+	if (head == NULL)
+		return true;
+
+	return false;
+}
+void ll::ins(int n)
 {
 	node* nn = new node;
-	if (nn == NULL)
-	{
-		cout << "Queue Full" << endl;
-	}
-	nn->data = n;
+	nn->prn = n;
 	nn->next = NULL;
-	if(head==NULL)
+
+	if (isempty())
 	{
-		head = tail = nn;
+		head = nn;
 	}
 	else
 	{
-		tail->next = nn;
-		tail = nn;
+		node* p = head;
+		while (p->next != NULL)
+		{
+			p = p->next;
+		}
+		p->next = nn;
 	}
+	cout << "---Inserted in Queue---" << endl;
 }
-int sll::deq()
+void ll::del()
 {
-	int x = -1;
-	if (head == NULL)
-	{
-		cout << "Queue Empty" << endl;
-	}
-	node* p = head;
-	head = head->next;
-	x=p->data;
-	delete(p);
+	if (isempty())
+		cout << "---Nothing to delete--" << endl;
 
-	return x;
-}
-void sll::display(node* start)
-{
-	while (start != NULL)
+	else
 	{
-		cout << start->data << endl;
-		start = start->next;
+		node* p = head;
+		head = head->next;
+		delete(p);
+		cout << "---Deleted from Queue---" << endl;
+	}
+}
+void ll::disp()
+{
+	if (isempty())
+		cout << "---Nothing to Display---" << endl;
+	else
+	{
+		node* start = head;
+		while (start != NULL)
+		{
+			cout << start->prn << endl;
+			start = start->next;
+		}
 	}
 }
 int main()
 {
-	int select;
-	sll q;
+	int ch;
+	int ele;
+	ll a;
 	do
 	{
-		int x;
-		cout << "Enter 1.Inserting in Queue 2.Deleting from Queue 3.Display" << endl;
-		cin >> x;
+		cout << "\n\t Enter ur Choice" << endl;
+		cout << "\n\t 1.Add Job" << endl;
+		cout << "\n\t 2.Delete Job" << endl;
+		cout << "\n\t 3.Display " << endl;
+		cout << "\n\t 4.Exit" << endl;
 
-		switch (x)
+		cin >> ch;
+
+		switch (ch)
 		{
 		case 1:
-		{
-			int num;
-			cout << "Insert" << endl;
-			cout << "Enter Element" << endl;
-			cin >> num;
-			q.enq(num);
+			cout << "Enter PRN of Job" << endl;
+			cin >> ele;
+			a.ins(ele);
 			break;
-		}
+
 		case 2:
-		{
-			cout << "Delete" << endl;
-			int del = q.deq();
-			cout << "Deleted element is " << del << endl;
+			a.del();
 			break;
-		}
+
 		case 3:
-		{
-			cout << "Display" << endl;
-			q.display(q.head);
+			cout << "---Displaying Queue---" << endl;
+			a.disp();
 			break;
-		}
-		}
 
-		cout << "Enter 0 to stop" << endl;
-		cin >> select;
-	} while (select != 0);
+		case 4:
+			cout << "\n\tThank You!!!" << endl;
+			break;
 
+		default:cout << "Invalid Choice" << endl;
+		}
+	} while (ch != 4);
+	
+	cout << "\n\tExit" << endl;
 	return 0;
 }
 
