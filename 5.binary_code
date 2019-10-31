@@ -1,278 +1,268 @@
-//writing the int bin_get() function is a good trick n logic. SEE IT.
-//understand how we are playing with another seperate ll for every operation
-//Take care of how we do the 1s and 2s complement.
+//writing the void get_bin(int n) function is a good trick n logic. SEE IT.
+
 //Take count of the no of digits in the get_binary function itself.
-//AND , compare those in main and add the reqd zero's to get the reqd result.
+//and , compare those in main and add the reqd zero's to get the reqd result.
+//set sum and carry to zero while performing addn
+//use a^b^c for sum
+//use ab +bc + ac for carry
+//Take care of how we do the 1s and 2s complement.
+
 
 #include <iostream>
 using namespace std;
 class node
 {
-public:
-	int digit;
+	bool digit;
 	node* next;
 	node* prev;
+public:
+	friend class ll;
 };
-class dll
+
+class ll
 {
 public:
-	int count;
-	bool in1;
-	bool in2;
-	bool sum;
-	bool carry;
 	node* head;
 	node* tail;
-	dll()
+	bool sum;
+	bool carry;
+	ll()
 	{
-		head = NULL;
-		tail = NULL;
+		head = tail = NULL;
 	}
-	int binget(int num);
-	void add_first(node* nnf);
-	void add_last(node* nnl);
-	void display(node* just);
-	void comp1(node* start);
-	void comp2(node* end);
-	void binary_add(node* end1, node* end2);
+	void get_bin(int n);
+	void insert_front(bool b);
+	void insert_back(bool b);
+	void display();
+	void ones(node* start);
+	void twos(node* end);
+	void add(node* end1,node* end2);
+	int counter();
 };
-void dll::add_first(node* nnf)
+
+void ll::insert_front(bool b)
 {
-	if (head == NULL)
+	node* nn = new node;
+	nn->digit = b;
+	nn->next = NULL;
+	nn->prev = NULL;
+
+	if (head == NULL && tail == NULL)//empty
 	{
-		tail = head = nnf;
-		nnf->next = NULL;
-		nnf->prev = NULL;
+		head = tail = nn;
 	}
-	else
+	else//not empty
 	{
-		nnf->next = head;
-		head->prev = nnf;
-		nnf->prev = NULL;
-		head = nnf;
+		nn->next = head;
+		head->prev = nn;
+		head = nn;
 	}
 }
-void dll::add_last(node* nnl)
+
+void ll::insert_back(bool b)
 {
-	if (head == NULL)
+	node* nn = new node;
+	nn->digit = b;
+	nn->next = NULL;
+	nn->prev = NULL;
+
+	if (head == NULL && tail == NULL)//empty
 	{
-		tail = head = nnl;
-		nnl->next = NULL;
-		nnl->prev = NULL;
+		head = tail = nn;
 	}
-	else
+	else//not empty
 	{
-		tail->next = nnl;
-		nnl->prev = tail;
-		nnl->next = NULL;
-		tail = nnl;
+		tail->next = nn;
+		nn->prev = tail;
+		tail = nn;
 	}
 }
-void dll::display(node* just)
+
+
+void ll::get_bin(int n)
 {
-	while (just != NULL)
+	while (n != 1)
 	{
-		cout << just->digit << " ";
-		just = just->next;
+		if (n % 2 == 0)
+		{
+			insert_front(0);
+		}
+		else
+		{
+			insert_front(1);
+		}
+		n = n / 2;
 	}
-	cout << endl;
+	insert_front(1);
 }
-void dll::comp1(node* start)
+
+void ll::ones(node* start)
 {
 	while (start != NULL)
 	{
-		node* nn = new node;
 		if (start->digit == 1)
 		{
-			nn->digit = 0;
-			add_last(nn);
+			insert_back(0);
 		}
 		else
 		{
-			nn->digit = 1;
-			add_last(nn);
+			insert_back(1);
 		}
+
 		start = start->next;
 	}
 }
-void dll::comp2(node* end)
+
+void ll::twos(node* end)
 {
-	in1 = end->digit;
-	in2 = 1;
-	sum = in1 ^ in2;
-	carry = in1 & in2;
-	node* n = new node;
-	n->digit = sum;
-	add_first(n);
+	if (end->digit == 0)
+	{
+		insert_front(1);
+		carry = 0;
+	}
+	else
+	{
+		insert_front(0);
+		carry = 1;
+	}
+
 	end = end->prev;
+
 	while (end != NULL)
 	{
-		node* nn = new node;
-		in1 = end->digit;
-		in2 = 0;
-		if (!carry)
+		if (carry == 0)
 		{
-			sum = in1 ^ in2;
-			carry = in1 & in2;
-			nn->digit = sum;
-			add_first(nn);
+			insert_front(end->digit);
 		}
 		else
 		{
-			sum = !in1;
-			carry = in1;
-			nn->digit = sum;
-			add_first(nn);
+			if (end->digit == 0)
+			{
+				insert_front(1);
+				carry = 0;
+			}
+			else
+			{
+				insert_front(0);
+				carry = 1;
+			}
 		}
+
 		end = end->prev;
 	}
-}
-int dll::binget(int num)
-{
-	count = 0;
-	do
+	
+	if (carry==1)
 	{
-		node* nn = new node;
-		int q = num / 2;
-		int r = num % 2;
-		if (r == 1)
-		{
-			nn->digit = 1;
-			count++;
-			add_first(nn);
-		}
-		else
-		{
-			nn->digit = 0;
-			count++;
-			add_first(nn);
-		}
-		num = q;
-
-	} while (num != 1);
-	node* nnn = new node;
-	nnn->digit = 1;
-	count++;
-	add_first(nnn);
-	display(head);
-	return count;
-
+		insert_front(1);
+	}
 }
-void dll::binary_add(node* end1, node* end2)
+
+void ll::add(node* end1, node* end2)
 {
-	in1 = end1->digit;
-	in2 = end2->digit;
-	sum = in1 ^ in2;
-	carry = in1 & in2;
-	node* n = new node;
-	n->digit = sum;
-	add_first(n);
-	end1 = end1->prev;
-	end2 = end2->prev;
-	while (end1 != NULL && end2 != NULL)
+	sum = 0;
+	carry = 0;
+
+	while (end1 != NULL)
 	{
-		node* nn = new node;
-		in1 = end1->digit;
-		in2 = end2->digit;
-		if (!carry)
-		{
-			sum = in1 ^ in2;
-			carry = in1 & in2;
-			nn->digit = sum;
-			add_first(nn);
-			//display(head);
-		}
-		else
-		{
-			sum = !(in1 ^ in2);
-			carry = in1 | in2;
-			nn->digit = sum;
-			add_first(nn);
-		}
+		sum = (end1->digit ^ end2->digit ^ carry);
+		carry = (end1->digit & end2->digit) | (end2->digit & carry) | (end1->digit & carry);
+		insert_front(sum);
+
 		end1 = end1->prev;
 		end2 = end2->prev;
 	}
-	if (!carry)
+
+	if (carry==1)
 	{
-		display(head);
-	}
-	else
-	{
-		node* nnn = new node;
-		nnn->digit = carry;
-		add_first(nnn);
-		display(head);
+		insert_front(1);
 	}
 }
+
+void ll::display()
+{
+	node* start = head;
+	cout << "---Display---" << endl;
+	while (start != NULL)
+	{
+		cout << start->digit << " " ;
+		start = start->next;
+	}
+	cout << endl;
+}
+
+int ll::counter()
+{
+	int count = 0;
+	node* start = head;
+	while (start != NULL)
+	{
+		count++;
+		start = start->next;
+	}
+	return count;
+}
+
+
 int main()
 {
-	dll a;
-	int num, num2;
-	cout << "Enter integer number" << endl;
-	cin >> num;
-	int c1 = a.binget(num);
-	cout << "Total digits " << c1 << endl;
+	int n,n2;
+	cout << "Enter the decimal number" << endl;
+	cin >> n;
 
-	dll b;
-	cout << "1s complement" << endl;
-	b.comp1(a.head);
-	b.display(b.head);
-	cout << "Original number binary" << endl;
-	a.display(a.head);
+	ll a;
 
-	dll c;
-	cout << "2s complement" << endl;
-	c.comp2(b.tail);
-	c.display(c.head);
-	cout << "Original number binary" << endl;
-	a.display(a.head);
+	a.get_bin(n);
+	a.display();
 
-	dll d;
-	cout << "Addition of 2 binary" << endl;
-	cout << "Enter 2nd integer" << endl;
-	cin >> num2;
-	cout << "B :" << endl;
-	int c2 = d.binget(num2);
-	cout << "Total digits " << c2 << endl;
+	ll b;
 
+	cout << "\n\t1's Complement" << endl;
+	b.ones(a.head);
+	b.display();
 
-	cout << "A :" << endl;
-	a.display(a.head);
+	ll c;
 
-	dll e;
-	cout << "Addition" << endl;
+	cout << "\n\t2's Complement" << endl;
+	c.twos(b.tail);
+	c.display();
+
+	ll a2;
+
+	cout << "Enter another decimal number" << endl;
+	cin >> n2;
+	a2.get_bin(n2);
+	a2.display();
+
+	cout << "\n\tAddition" << endl;
+
+	ll e;
+
+	int c1 = a.counter();
+	int c2 = a2.counter();
+
 	if (c1 == c2)
 	{
-		cout << "Result" << endl;
-		e.binary_add(a.tail, d.tail);
+		e.add(a.tail, a2.tail);
 	}
 	else if (c1 > c2)
 	{
-		int c = c1 - c2;
-		for (int i = 0; i < c; i++)
+		for (int i = 0; i < c1 - c2; i++)
 		{
-			node* n1 = new node;
-			n1->digit = 0;
-			d.add_first(n1);
+			a2.insert_front(0);
 		}
-		cout << "Number required for adding " << endl;
-		d.display(d.head);
-		cout << "Result" << endl;
-		e.binary_add(a.tail, d.tail);
+		e.add(a.tail, a2.tail);
 	}
+
 	else
 	{
-		int c0 = c2 - c1;
-		for (int i = 0; i < c0; i++)
+		for (int i = 0; i < c2 - c1; i++)
 		{
-			node* n2 = new node;
-			n2->digit = 0;
-			a.add_first(n2);
+			a.insert_front(0);
 		}
-		cout << "Number required for adding " << endl;
-		a.display(a.head);
-		cout << "Result" << endl;
-		e.binary_add(a.tail, d.tail);
+		e.add(a.tail, a2.tail);
 	}
+
+	e.display();
+
 	return 0;
 }
