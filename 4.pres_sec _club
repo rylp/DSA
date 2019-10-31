@@ -1,357 +1,505 @@
 //SINGLY LINKEDLIST
-//whenever we make a nnf , nnb , after taking details. nnf->next=NULL is essential.
+
 //use do while to keep adding members.
-//In delete by PRN, typing starting prn fucks up.
+
 //In dipslay, seperate display for pres and sec isnt happening.
+
 //Node swap isnt happening
+
 //Sorting is done . not merging
 
-#include<iostream>
+#include <iostream>
 using namespace std;
+
 class node
 {
-public:
-	int prn;
 	string name;
+	int prn;
 	node* next;
+public:
+	node()
+	{
+		name ="";
+		prn = 0;
+	}
+	friend class ll;
 };
+
 class ll
 {
 public:
 	node* head;
 	node* tail;
+
 	ll()
 	{
 		head = NULL;
 		tail = NULL;
 	}
-	void add_first(node* nnf);
-	void add_between(node* nnb);
-	void add_end(node* nnl);
-	void details(node* just);
-	void display(node* begin);
-	void delete_first();
-	void delete_between(int key);
-	void delete_end();
-	void disp_rev(node* temp);
-	void concate_list(node* link);
+	void insert_front();
+	void insert_between(int key);
+	void insert_back();
+	void del_front();
+	void del_between(int key);
+	void del_back();
+	void display();
+	void count();
+	void disp_rev(node* start);
+	void concate(node* ahead, node* atail, node* bhead);
 	void sort();
 };
-void ll::details(node* just)
+
+void ll::insert_front()
 {
-	cout << "Name :";
-	cin >> just->name;
-	cout << "PRN:";
-	cin >> just->prn;
-	just->next = NULL;
+	node* nn = new node;
+	cout << "Enter President Details:" << endl;
+	cout << "Enter Name:" << endl;
+	cin >> nn->name;
+	cout << "Enter PRN:" << endl;
+	cin >> nn->prn;
+	nn->next = NULL;
+
+	if (head == NULL && tail == NULL)//empty
+	{
+		head = nn;
+		tail = nn;
+		cout << "---Inserted in Empty Linked List---" << endl;
+	}
+
+	else//not empty
+	{
+		nn->next = head;
+		head = nn;
+		cout << "---Inserted At Start---" << endl;
+	}
 }
-void ll::add_first(node* nnf)
+
+void ll::insert_back()
 {
-	if (head == NULL)
+	node* nn = new node;
+	cout << "Enter Secreatary Details:" << endl;
+	cout << "Enter Name:" << endl;
+	cin >> nn->name;
+	cout << "Enter PRN:" << endl;
+	cin >> nn->prn;
+	nn->next = NULL;
+
+	if (head == NULL && tail == NULL)//empty
 	{
-		head = nnf;
-		tail = nnf;
+		head = nn;
+		tail = nn;
+		cout << "---Inserted in Empty LINKED List---" << endl;
 	}
-	else
+	else//not empty
 	{
-		nnf->next = head;
-		head = nnf;
+		tail->next = nn;
+		tail = nn;
+		cout << "---Inserted at End---" << endl;
 	}
 }
-void ll::add_between(node* nnb)
+
+void ll::insert_between(int key)
 {
-	int after;
-	cout << "Enter the PRN after which you want to insert" << endl;
-	cin >> after;
-	node* temp;
-	node* temp1;
-	if (head == NULL)
+	//3cases
+
+	node* nn = new node;
+	cout << "Enter Member Details:" << endl;
+	cout << "Enter Name:" << endl;
+	cin >> nn->name;
+	cout << "Enter PRN:" << endl;
+	cin >> nn->prn;
+	nn->next = NULL;
+
+	int flag = 0;
+
+	if (head == NULL && tail == NULL)//empty
 	{
-		head = nnb;
-		tail = nnb;
+		head = nn;
+		tail = nn;
+		cout << "---Inserted in Empty Linked list" << endl;
+		cout << "---Currently This Member is Both Pres and Sec" << endl;
 	}
-	else
+	
+	else if (flag == 0)
 	{
-		temp = head;
-		while (temp->prn != after)
+		node* start = head;
+		while (start != NULL)
 		{
+			if (start->prn == key)
+				flag++;
+
+			start = start->next;
+		}
+
+		if (flag == 0)//invalid prn
+		{
+			cout << "---Invalid PRN---" << endl;
+			cout << "---Insertion Not possible---" << endl;
+		}
+
+		else if (tail->prn == key)//inserting at last
+		{
+			tail->next = nn;
+			tail = nn;
+			cout << "---Inserted at End---" << endl;
+			cout << "---This Member became Secretary---" << endl;
+		}
+		else //inserting in valid prn
+		{
+			node* temp = head;
+			node* temp2;
+
+			while (temp->prn != key && temp != NULL)
+			{
+				temp = temp->next;
+			}
+
+			temp2 = temp->next;
+
+			temp->next = nn;
+			nn->next = temp2;
+
+			cout << "---Inserted Member at proper Position---" << endl;
+		}
+	}
+}
+
+void ll::del_front()
+{
+	//2 cases
+	if (head == NULL && tail == NULL)//empty
+		cout << "---Nothing To delete---" << endl;
+
+	else//non empty
+	{
+		node* temp = head;
+		head = head->next;
+		delete(temp);
+	}
+}
+
+void ll::del_between(int key)
+{
+	int flag = 0;
+
+	if (head == NULL && tail == NULL)//empty
+	{
+		cout << "---Nothing to Delete---" << endl;
+	}
+	else if (flag == 0)
+	{
+		node* start = head;
+		while (start != NULL)
+		{
+			if (start->prn == key)
+				flag++;
+
+			start = start->next;
+		}
+		if (flag == 0)
+		{
+			cout << "---Invalid PRN---" << endl;
+			cout << "---No deletion Possible" << endl;
+		}
+		else if (tail->prn == key && head!=tail)//delete at end with multiple elements
+		{
+			node* temp = head;
+			while (temp->next != tail)
+			{
+				temp = temp->next;
+			}
+			tail = temp;
+			temp = temp->next;
+			tail->next = NULL;
+			delete(temp);
+			cout << "---DEleted at end---" << endl;
+		}
+		else if (head->prn == key)//del at start with single and multiple elements
+		{
+			node* temp = head;
+			head = head->next;
+			temp->next = NULL;
+			delete(temp);
+			cout << "---Deleted at start---" << endl;
+		}
+
+		else//proper deleteion from between
+		{
+			node* temp = head;
+			node* temp2 = head;
+			while (temp->prn != key)
+			{
+				temp2 = temp;
+				temp = temp->next;
+			}
+			temp2->next = temp->next;
+			temp->next = NULL;
+			delete(temp);
+			cout << "---Deleted from proper position---" << endl;
+		}
+	}
+}
+void ll::del_back()
+{
+	//3 cases
+
+	if (head == NULL && tail == NULL)//empty
+	{
+		cout << "---Nothing to Delete--- " << endl;
+	}
+
+	else if (head->next == NULL)//only 1 element
+	{
+		node* temp=tail;
+		delete(temp);
+		head = tail = NULL; //very imp
+		cout << "---Deleted the only Element in Linked List---" << endl;
+	}
+
+	else
+	{
+		node* temp = head;
+		node* temp2 = head;
+		while (temp->next != NULL)
+		{
+			temp2 = temp;
 			temp = temp->next;
 		}
-		temp1 = temp->next;
-		if (temp1 == NULL)
-		{
-			temp->next = nnb;
-			tail = nnb;
-		}
-		else
-		{
-			temp->next = nnb;
-			nnb->next = temp1;
-		}
+		tail = temp2;
+		tail->next = NULL; //very imp
+		delete(temp);
+		cout << "---Deleted at End----" << endl;
 	}
 }
-void ll::add_end(node* nnl)
-{
-	if (head == NULL)
-	{
-		head = nnl;
-		tail = nnl;
-	}
-	else
-	{
-		node* tmp;
-		tmp = head;
-		while (tmp->next != NULL)
-		{
-			tmp = tmp->next;
-		}
-		tmp->next = nnl;
-		nnl->next = NULL;
-	}
-}
-void ll::delete_first()
-{
-	node* tempo;
-	if (head == NULL)
-	{
-		cout << "Nothing to delete" << endl;
-	}
-	else
-	{
-		tempo = head;
-		head = head->next;
-		delete(tempo);
-	}
-}
-void ll::delete_between(int key)
-{
-	node* tem;
-	node* follow;
-	tem = head;
-	follow = head;
-	while (tem->prn != key)
-	{
-		follow = tem;
-		tem = tem->next;
-	}
-	follow->next = tem->next;
-	delete(tem);
-}
-void ll::delete_end()
-{
-	node* tmp;
-	node* tmp1;
-	if (tail == NULL)
-	{
-		cout << "Nothing to delete" << endl;
-	}
-	else
-	{
-		tmp = head;
-		while (tmp->next->next != NULL)
-		{
-			tmp = tmp->next;
-		}
-		tmp1 = tmp->next;
-		tmp->next = NULL;
-		tail = tmp;
-		delete(tmp1);
-	}
-}
-void ll::disp_rev(node* temp)
-{
-	if (temp->next == NULL)
-	{
-		cout << temp->name << endl;
-		cout << temp->prn << endl;
-	}
-	else
-	{
-		disp_rev(temp->next);
 
-		cout << temp->name << endl;
-		cout << temp->prn << endl;
-	}
-
-}
-void ll::concate_list(node* link)
+void ll::concate(node* ahead, node* atail, node* bhead)
 {
-	node* temp = head;
-	while (temp->next != NULL)
-	{
-		temp = temp->next;
-	}
-	temp->next = link;
-
+	head = ahead;
+	atail->next = bhead;
 }
+
 void ll::sort()
 {
+	/*string temp_name;
+	int temp_prn;
+	node* temp3 = head;
+	node* temp1;
+	node* temp2;
+
+	for (temp1 = head; temp1 != NULL; temp1 = temp1->next)//for(int i=0;i<n-1;i++)
+	{
+		for (temp2 = head; temp2->next!= NULL; temp2 = temp2->next) //for(j=0;j<n-1;j++)
+		{
+			temp2->next = temp3;
+
+			if (temp2->prn > temp3->prn)
+			{
+				
+
+				temp_prn = temp2->prn;
+				temp2->prn = temp3->prn;
+				temp3->prn = temp_prn;
+
+				temp_name = temp2->name;
+				temp2->name = temp3->name;
+				temp3->name= temp_name;
+
+			}
+		}
+	}*/
+
 	node* temp1;
 	node* temp2;
 	node* temp3;
-	node* follow = head;
-	int temp_prn;
-	string temp_name;
+	
 
-	for (temp1 = head; temp1 != NULL; temp1 = temp1->next)
+	for (temp1 = head; temp1->next != NULL; temp1 = temp1->next)//for(i=0;i<n-1;i++)
 	{
-		for (temp2 = head; temp2->next != NULL; temp2 = temp2->next)
+		for (temp2 = head; temp2->next != NULL; temp2 = temp2->next)//for(j=0;j<n-1;j++)
 		{
-			//By Node swap
-		   /* if (temp3->next != NULL)
-			{
-				if (temp2->prn > temp3->prn)
-				{
-					cout << "in" << endl;
-					//swap here
-					follow->next = temp3;
-					temp2->next = temp3->next;
-					temp3->next = temp2;
-				   // display(head);
-				}
-				follow = temp2;
-			}
-			else
-			{
-				if (temp2->prn > temp3->prn)
-				{
-					follow->next = temp3;
-					temp3->next = temp2;
-					temp2->next = NULL;
-
-				}
-				follow = temp2;
-			}
-			*/
-
 			//BY DATA SWAP 
 			temp3 = temp2->next;
 			if (temp2->prn > temp3->prn)
 			{
-				temp_prn = temp3->prn;
-				temp3->prn = temp2->prn;
-				temp2->prn = temp_prn;
 
-				temp_name = temp3->name;
-				temp3->name = temp2->name;
-				temp2->name = temp_name;
+				swap(temp2->prn, temp3->prn);
+
+				swap(temp2->name, temp3->name);
 			}
 		}
-		//temp1 = temp1->next;
 	}
-
 }
-void ll::display(node* begin)
+
+void ll::display()
+{
+	cout << "\n\tDisplaying Members" << endl;
+	node* temp = head;
+	if (temp == NULL)
+	{
+		cout << "---Nothing to display---" << endl;
+		cout << "---Empty linked list---" << endl;
+	}
+	while (temp != NULL)
+	{
+		cout <<"Name:"<<temp->name << endl;
+		cout << "PRN:" << temp->prn << endl;
+		temp = temp->next;
+	}
+}
+
+void ll::disp_rev(node* start)
+{
+	if (start->next == NULL)
+	{
+		cout << "Name: " << start->name << endl;
+		cout << "PRN: " << start->prn << endl;
+	}
+	else
+	{
+		disp_rev(start->next);
+
+		cout << "Name: " << start->name << endl;
+		cout << "PRN: " << start->prn << endl;
+	}
+}
+
+void ll::count()
 {
 	int count = 0;
-	while (begin != NULL)
+	node* start = head;
+	while (start != NULL)
 	{
-		cout << begin->name << endl;
-		cout << begin->prn << endl;
-		begin = begin->next;
 		count++;
+		start = start->next;
 	}
-	cout << "Total members " << count << endl;
+	cout << "Total Members: " << count << endl;
 }
+
 int main()
 {
-	int key, key1;
+	int ch, ch2;
+	int prn,prn2,prn3;
 	ll a;
-	cout << "DIV A" << endl;
-	cout << "PRESIDENT" << endl;
-	node* nnf = new node;
-	cout << "Enter president details" << endl;
-	a.details(nnf);
-	nnf->next = NULL;
-	a.add_first(nnf);
-	a.display(a.head);
-	int x;
-	cout << "MEMBERS" << endl;
+
+	cout << "\n\tDIV A" << endl;
+
 	do
 	{
-		node* nnb = new node;
-		a.details(nnb);
-		nnb->next = NULL;
-		a.add_between(nnb);
-		a.display(a.head);
-		cout << "Enter 0 to stop " << endl;
-		cin >> x;
-	} while (x != 0);
+		cout << "Select Your Choice" << endl;
+		cout << "\n\t1.Add President" << endl;
+		cout << "\n\t2.Add Member" << endl;
+		cout << "\n\t3.Add Secretary" << endl;
+		cout << "\n\t4.Delete President" << endl;
+		cout << "\n\t5.Delete Member" << endl;
+		cout << "\n\t6.Delete Secretary" << endl;
+		cout << "\n\t7.Display Club Member" << endl;
+		cout << "\n\t8.Display Club Members in Reverse" << endl;
+		cout << "\n\t9.Total Members Count" << endl;
+		cout << "\n\t10.Exit" << endl;
+		cin >> ch;
 
+		switch (ch)
+		{
+		case 1:
+			a.insert_front();
+			break;
 
-	node* nnl = new node;
-	cout << "Enter secretary details" << endl;
-	a.details(nnl);
-	nnl->next = NULL;
-	a.add_end(nnl);
-	a.display(a.head);
-	cout << "Delete at end" << endl;
-	a.delete_end();
-	a.display(a.head);
-	cout << "Enter PRN of the person to be deleted" << endl;
-	cin >> key;
-	a.delete_between(key);
-	a.display(a.head);
-	cout << "Delete at begin" << endl;
-	nnf = nnf->next;
-	a.delete_first();
-	a.display(a.head);
+		case 2:
+			cout << "Enter PRN after which you want ?" << endl;
+			cin >> prn;
+			a.insert_between(prn);
+			break;
 
+		case 3:
+			a.insert_back();
+			break;
 
-	cout << "DIV A REVERSE" << endl;
-	a.disp_rev(a.head);
-	cout << "Members of DIV A" << endl;
-	a.display(a.head);
+		case 4:
+			a.del_front();
+			break;
 
+		case 5:
+			cout << "Enter PRN You want to delete" << endl;
+			cin >> prn2;
+			a.del_between(prn2);
+			break;
+
+		case 6:
+			a.del_back();
+			break;
+
+		case 7:
+			a.display();
+			break;
+
+		case 8:
+			a.disp_rev(a.head);
+			break;
+
+		case 9:
+			a.count();
+			break;
+
+		case 10:
+			cout << "Thank You !!!" << endl;
+			break;
+
+		default:cout << "Invalid Choice" << endl;
+
+		}
+
+	} while (ch !=10 );
+
+	cout << "\n\tDIV B " << endl;
 	ll b;
-	cout << "DIV B" << endl;
-	node* nnfB = new node;
-	cout << "Enter president details" << endl;
-	b.details(nnfB);
-	nnfB->next = NULL;
-	b.add_first(nnfB);
-	b.display(b.head);
-	int y;
+
 	do
 	{
-		node* nnbB = new node;
-		b.details(nnbB);
-		nnbB->next = NULL;
-		b.add_between(nnbB);
-		b.display(b.head);
-		cout << "Enter 0 to stop " << endl;
-		cin >> y;
-	} while (y != 0);
+		cout << "Select Your Choice" << endl;
+		cout << "\n\t1.Add President" << endl;
+		cout << "\n\t2.Add Member" << endl;
+		cout << "\n\t3.Add Secretary" << endl;
+		cout << "\n\t4.Display" << endl;
+		cout << "\n\t5.Exit" << endl;
+		cin >> ch2;
 
-	node* nnlB = new node;
-	cout << "Enter secretary details" << endl;
-	b.details(nnlB);
-	nnlB->next = NULL;
-	b.add_end(nnlB);
-	b.display(b.head);
-	cout << "Delete at end" << endl;
-	b.delete_end();
-	b.display(b.head);
-	cout << "Enter PRN of the person to be deleted" << endl;
-	cin >> key1;
-	b.delete_between(key1);
-	b.display(b.head);
-	cout << "Delete at begin" << endl;
-	nnfB = nnfB->next;
-	b.delete_first();
-	b.display(b.head);
-	cout << "DIV B REVERSE" << endl;
-	b.disp_rev(b.head);
-	cout << "Members of DIV B" << endl;
-	b.display(b.head);
+		switch (ch2)
+		{
+		case 1:
+			b.insert_front();
+			break;
 
-	a.concate_list(b.head);
-	cout << "DISPLAY" << endl;
-	a.display(a.head);
+		case 2:
+			cout << "Enter PRN after which you want ?" << endl;
+			cin >> prn3;
+			b.insert_between(prn3);
+			break;
 
-	cout << "SORT LIST" << endl;
-	a.sort();
-	a.display(a.head);
+		case 3:
+			b.insert_back();
+			break;
+
+		case 4:
+			b.display();
+			break;
+
+		case 5:cout << "Thank You !!!" << endl;
+			break;
+
+		default:cout << "Invalid Choice" << endl;
+		
+		}
+
+	} while (ch2 != 5);
+
+	ll c;
+	cout << "\n\tConcatenating both list" << endl;
+	c.concate(a.head, a.tail, b.head);
+	c.display();
+
+	cout << "\n\tSorting Combined list" << endl;
+	c.sort();
+	c.display();
 
 	return 0;
 }
