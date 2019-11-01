@@ -1,289 +1,338 @@
-// dsa_vanilla.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-//only add_last function is reqd.
-//OBSV CAREFULLY THE CHANGES BETWEEN Intersection and Minus Fn.
-//Fns reqd--
-//1. add_last 2.details 3.display
-//4. copy  5.intersection 6.add_left 7.minus
-//Requirement of dll is not needed.
-// i did it in SLL way.
-//For, only vanilla and not both, go for minus fn and do van - bs.
-//For , only BS and not both, go for minus fn and do bs - van.
-//Create copies of van and bs in main to use in the switch case directly.
+//only inserting at end function is reqd.
+//OBSV CAREFULLY THE CHANGES BETWEEN Intersection and Union and Only Fn.
+
+//1. In union:
+// add A to C first and then check if element is there in B , dont insert, else insert.
+// flag is reqd.
+
+//2. In intersection
+// check if common. if yes insert
+//No use of flag
+
+//3. ONly
+//addfrom and checkin
+// flag reqd.
+
+
 //sapmle test case is univ:1 2 3 4 5 6 
 //van:1 2 3
 //bs:2 4 1 6
+
 #include <iostream>
 using namespace std;
+
 class node
 {
-public:
 	string name;
 	int prn;
 	node* next;
-	//node* prev;
+public:
+	node()
+	{
+		name = "";
+		prn = 0;
+	}
+	friend class ll;
 };
-class dll
+
+class ll
 {
 public:
 	node* head;
 	node* tail;
-	dll()
+public:
+	ll()
 	{
-		tail=head = NULL;
+		head = tail = NULL;
 	}
-	void add_last(node* nnl);
-	void display(node* just);
-	void details(node* get);
-	void add_left(node* start);
-	void intersection(node* temp1, node* temp2);
-	void copy(node* temp);
-	void minus(node* tmp1, node* tmp2);
+	void insert();//without node specification
+	void copy(node* nn);//with node specification
+	void display();
+	void uni(node* ahead, node* bhead);//union
+	void intersect(node* ahead, node* bhead);//intersect
+	void only(node* addfrom, node* checkin);// only van, only bs, neither-nor
 };
-void dll::details(node* get)
-{
-	cout << "Enter member details" << endl;
-	cout << "Name :";
-	cin >> get->name;
-	cout << "Number :";
-	cin >> get->prn;
-}
-void dll::add_last(node* nnl)
-{
-	if (head == NULL)
-	{
-		head =tail = nnl;
-		tail->next = NULL;
-		//head->prev = NULL;
-	}
-	else
-	{
-		tail->next = nnl;
-		//nnl->prev = tail;
-		tail = nnl;
-		tail->next = NULL;
-	}
-}
-void dll::display(node* just)
-{
-	int count = 0;
 
-	while (just!=NULL)
-	{
-		cout << just->name << endl;
-		cout << just->prn << endl;
-		just = just->next;
-		count++;
-	}
-	cout << "Total members " << count << endl;
-
-}
-void dll::add_left(node *start)
+void ll::only(node* ahead, node* bhead)
 {
-	while (start != NULL)
+	int flag = 0;
+	while (ahead != NULL)
 	{
-		int flag = 0;
-		node* temp = head;
-		while (temp != NULL)
+		flag = 0;
+		node* start = bhead;
+
+		while (start != NULL)
 		{
-			if (temp->prn == start->prn)
+			if (start->prn == ahead->prn)
 			{
 				flag++;
 				break;
 			}
-				temp = temp->next;
+			start = start->next;
 		}
-		if(flag==0)
-		{
-			node* n = new node;
-			n->name = start->name;
-			n->prn = start->prn;
-			n->next = NULL;
-			//n->prev = NULL;
-			add_last(n);
-		}
-		start = start->next;
-	}
-}
-void dll::copy(node* temp)
-{
-	while (temp != NULL)
-	{
-		node* nn = new node;
-		nn->name = temp->name;
-		nn->prn = temp->prn;
-		nn->next = NULL;
-		//nn->prev = NULL;
-		add_last(nn);
-		temp = temp->next;
-	}
-}
 
-void dll::intersection(node* temp1,node* temp2)
-{
-	node* temp3;
-	temp3= temp2;
-	while (temp1 != NULL)
-	{
-		int flag = 0;
-		temp2 = temp3;
-		while (temp2 != NULL)
-		{
-			if (temp1->prn == temp2->prn)
-			{
-				flag++;
-				break;
-			}
-				temp2 = temp2->next;
-		}
-		if (flag == 1)
-		{
-			node* nn = new node;
-			nn->name = temp1->name;
-			nn->prn = temp1->prn;
-			nn->next = NULL;
-			//nn->prev = NULL;
-			add_last(nn);
-		}
-			temp1 = temp1->next;
-	}
-}
-
-void dll::minus(node* tmp1, node* tmp2)
-{
-	node* tmp3;
-	tmp3 = tmp2;
-	while (tmp1 != NULL)
-	{
-		int flag = 0;
-		tmp2 = tmp3;
-		while (tmp2 != NULL)
-		{
-			if (tmp1->prn == tmp2->prn)
-			{
-				flag++;
-			}
-				tmp2 = tmp2->next;
-		}
 		if (flag == 0)
 		{
 			node* nn = new node;
-			nn->name = tmp1->name;
-			nn->prn = tmp1->prn;
+			nn->name = ahead->name;
+			nn->prn = ahead->prn;
 			nn->next = NULL;
-			//nn->prev = NULL;
-			add_last(nn);
+
+			copy(nn);
 		}
-		tmp1 = tmp1->next;
+
+		ahead = ahead->next;
+	}
+}
+
+void ll::uni(node* ahead, node* bhead)
+{
+	int flag = 0;
+
+	while (ahead != NULL)//copy everything in a in c
+	{
+		node* nn = new node;
+		nn->name = ahead->name;
+		nn->prn = ahead->prn;
+		nn->next = NULL;
+
+		copy(nn);
+
+		ahead = ahead->next;
+	}
+
+	while (bhead != NULL)//check if any same ele in b with c. if not ,insert in c.
+	{
+		node* chead = head;
+		flag = 0;
+
+		while (chead != NULL)
+		{
+			if (chead->prn == bhead->prn)
+			{
+				flag++;
+				break;
+			}
+
+			chead = chead->next;
+		}
+
+		if (flag == 0)
+		{
+			node* nn = new node;
+			nn->name = bhead->name;
+			nn->prn = bhead->prn;
+			nn->next = NULL;
+			copy(nn);
+		}
+
+		bhead = bhead->next;
+	}
+}
+
+void ll::intersect(node* addfrom, node*checkin )
+{
+	while (addfrom != NULL)
+	{
+		node* start = checkin;
+
+		while (start != NULL)
+		{
+			if (addfrom->prn == start->prn)
+			{
+				node* nn = new node;
+				nn->name = start->name;
+				nn->prn = start->prn;
+				nn->next = NULL;
+
+				copy(nn);
+
+				break;
+			}
+
+			start = start->next;
+		}
+
+		addfrom = addfrom->next;
+	}
+}
+
+void ll::copy(node* nn)
+{
+	if (head == NULL && tail == NULL)//empty
+	{
+		head = nn;
+		tail = nn;
+	}
+	else//not empty
+	{
+		tail->next = nn;
+		tail = nn;
+	}
+}
+
+void ll::insert()
+{
+	node* nn = new node;
+	cout << "Enter name:" << endl;
+	cin >> nn->name;
+	cout << "Enter PRN:" << endl;
+	cin >> nn->prn;
+	nn->next = NULL;
+
+	if (head == NULL && tail == NULL)//empty
+	{
+		head = nn;
+		tail = nn;
+		cout << "---Inserted in empty list---" << endl;
+	}
+	else//not empty
+	{
+		tail->next = nn;
+		tail = nn;
+		cout << "---Insertion successfull---" << endl;
+	}
+}
+
+void ll::display()
+{
+	node* start = head;
+
+	if (start == NULL)
+	{
+		cout << "---Nothing To Display---" << endl;
+	}
+
+	while (start != NULL)
+	{
+		cout << "Name:" << start->name << endl;
+		cout << "PRN:" << start->prn << endl;
+		start = start->next;
 	}
 }
 int main()
 {
-	typedef int select;
-	select s1, s2, s3,s4,s5;
-	dll univ;
-	cout << "Enter all the members" << endl;
+	int ch,ch2,ch3,ch4;
+
+
+	cout << "Univ Set:Set of All Students" << endl;
+	ll univ;
 
 	do
 	{
-		node* nn = new node;
-		univ.details(nn);
-		nn->next = NULL;
-		//nn->prev = NULL;
-		univ.add_last(nn);
-		univ.display(univ.head);
+		cout << "Insert element" << endl;
+		univ.insert();
+
 		cout << "Enter 0 to stop" << endl;
-		cin >> s1;
-	} while (s1 != 0);
+		cin >> ch4;
 
-	dll van;
-	cout << "Enter members who love vanilla" << endl;
+	} while (ch4 != 0);
+
+	cout << "\n\tUniversal Set" << endl;
+	univ.display();
+
+
+	cout << "Set A: Vanilla" << endl;
+	ll a;
+
 	do
 	{
-		node* nn = new node;
-		van.details(nn);
-		nn->next = NULL;
-		//nn->prev = NULL;
-		van.add_last(nn);
-		van.display(van.head);
+		cout << "Insert element" << endl;
+		a.insert();
+		
 		cout << "Enter 0 to stop" << endl;
-		cin >> s2;
-	} while (s2 != 0);
+		cin >> ch;
 
-	dll bs;
-	cout << "Enter members who love butterscotch" << endl;
+	} while (ch != 0);
+
+	cout << "\n\tSet A" << endl;
+	a.display();
+
+	cout << "Set B :Butterscotch" << endl;
+
+	ll b;
+
 	do
 	{
-		node* nn = new node;
-		bs.details(nn);
-		nn->next = NULL;
-		//nn->prev = NULL;
-		bs.add_last(nn);
-		bs.display(bs.head);
+		cout << "Insert element" << endl;
+		b.insert();
+
 		cout << "Enter 0 to stop" << endl;
-		cin >> s3;
-	} while (s3 != 0);
+		cin >> ch2;
 
-	dll unionn;
-	dll intersectn;
-	dll van_copy;
-	dll bs_copy;
-	dll only_van;
-	dll only_bs;
-	dll unio;
-	dll not_both;
+	} while (ch2 != 0);
 
-	van_copy.copy(van.head);
-	bs_copy.copy(bs.head);
+	cout << "\n\tSet B" << endl;
+	b.display();
+
 	do
 	{
-		cout << "CHOOSE" << endl;
-		cout << "1.Vanilla/BS or both 2.Both Van & BS 3.Only Vanilla &not Butterscotch 4.Only butterscotch and not Vanilla 5.Dont like both" << endl;
-		cin >> s4;
+		cout << "\n\tEnter your choice" << endl;
+		cout << "\n\t1.Set of students who like either vanilla or butterscotch or both " << endl;
+		cout << "\n\t2. Set of students who like both vanilla and butterscotch " << endl;
+		cout << "\n\t3.Set of students who like only vanilla not butterscotch " << endl;
+		cout << "\n\t4. Set of students who like only butterscotch not vanilla " << endl;
+		cout << "\n\t5.Number of students who like neither vanilla nor butterscotch. " << endl;
+		cout << "\n\t6.Exit" << endl;
+		cin >> ch3;
 
-		switch (s4)
+		switch(ch3)
 		{
 			case 1:
 			{
-				cout << "Students who like vanilla or bs or both" << endl;
-				unionn.copy(van.head);
-				unionn.add_left(bs.head);
-				unionn.display(unionn.head);
+				cout << "\n\tUNION" << endl;
+				ll c;
+				c.uni(a.head, b.head);
+				c.display();
 				break;
 			}
 			case 2:
 			{
-				cout << "Set of students who like both vanilla and butterscotch" << endl;
-				intersectn.intersection(van.head, bs.head);
-				intersectn.display(intersectn.head);
+				cout << "\n\tIntersection" << endl;
+				ll d;
+				d.intersect(a.head, b.head);
+				d.display();
 				break;
 			}
 			case 3:
 			{
-				cout << "Set of students who like only vanilla not butterscotch " << endl;
-				only_van.minus(van_copy.head, bs_copy.head); // van - bs 
-				only_van.display(only_van.head);
+				cout << "\n\tOnly Vanilla" << endl;
+				ll e;
+				e.only(a.head, b.head);//the one in which you wanna subtract stuff.it is first parameter
+				e.display();
 				break;
 			}
+
 			case 4:
 			{
-				cout << "Set of students who like only butterscotch not vanilla " << endl;
-				only_bs.minus(bs_copy.head, van_copy.head); // bs- van
-				only_bs.display(only_bs.head);
+				cout << "\n\tOnly Butterscotch" << endl;
+				ll f;
+				f.only(b.head, a.head);//the one in which you wanna subtract stuff.it is first parameter
+				f.display();
 				break;
 			}
+
 			case 5:
 			{
-				cout << "Students who dont like vanilla or butterscotch or both" << endl;
-				unio.copy(van.head);
-				unio.add_left(bs.head);
-				not_both.minus(univ.head, unio.head); // univ - union
-				not_both.display(not_both.head);
+				cout << "\n\tNeither Vanilla nor Butterscotch" << endl;
+				ll g;
+				ll uni;
+				uni.uni(a.head, b.head);
+				g.only(univ.head, uni.head);//subtract from univ the ele in union set.
+				g.display();
+				break;
 			}
-		}
-		cout << "Enter 0 to exit" << endl;
-		cin >> s5;
-	} while (s5 != 0);
 
-		return 0;
+			case 6:
+			{
+				cout << "Thank You!!!" << endl;
+				break;
+			}
+			default:cout << "Invalid Choice" << endl;
+
+		}
+
+	} while (ch3 != 6);
+
+	return 0;
 }
