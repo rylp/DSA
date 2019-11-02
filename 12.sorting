@@ -1,0 +1,210 @@
+#include <iostream>
+using namespace std;
+
+void getdata(int a[], int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		cin >> a[i];
+	}
+}
+
+void putdata(int a[], int n)
+{
+	for (int i = 0; i<n; i++)
+	{
+		cout << a[i] << " ";
+	}
+	cout << endl;
+}
+
+void topfive(int a[], int n)
+{
+	if (n < 5)
+	{
+		cout << "Less than 5 elements in array" << endl;
+	}
+	else
+	{
+		for (int i = n - 1; i >= (n - 5); i--)
+		{
+			cout << a[i] << " ";
+		}
+		cout << endl;
+	}
+}
+
+void bsort(int a[], int n)
+{
+	//outer iteration: i-> 0 to n-1
+	//inner interation: j-> 0 to (n-1-i)
+
+	//swap. a[j],a[j+1].
+
+	for (int i = 0; i < n - 1; i++)
+	{
+		for (int j = 0; j < (n - 1 - i); j++)
+		{
+			if (a[j] > a[j + 1]) //checking if next ele is greater
+			{
+				swap(a[j], a[j + 1]);
+			}
+		}
+	}
+}
+
+void ssort(int a[], int n)
+{
+	//inner iteration : i-> 0 to (n-1)
+	//outer iteration : j-> i+1 to n
+
+	//swap:a[pos],a[i].
+
+	int pos;
+
+	for (int i = 0; i < n - 1; i++)
+	{
+		pos = i;
+
+		for (int j = i + 1; j < n; j++)
+		{
+			if (a[pos] > a[j]) //in order to find minimum pos
+			{
+				pos = j;
+			}
+		}
+
+		swap(a[i], a[pos]);
+	}
+}
+
+void isort(int a[], int n)
+{
+	//outer iteration: i-> 1 to n
+	//inner iteration: j->i-1 to (j>=0 && a[j]>temp)
+
+	//swap: a[i],a[j]
+
+	int temp;
+
+	for (int i = 1; i < n; i++)
+	{
+		temp = a[i];
+
+		for (int j = i - 1; j >= 0 && a[j] > temp; j--)
+		{
+			a[j + 1] = a[j];
+			a[j] = temp;
+		}
+	}
+}
+
+void shsort(int a[], int n)
+{
+	//first iteration : i=n/2 ; i>0 ; i=i/2
+	//second iteration : j=i ; j<n ; j++
+	//third iteration : k=j-1 ; k>=0 ; k=k-i
+
+	//swap: a[k+i],a[k].
+
+	int i, j, k;
+
+	for (i = n / 2; i > 0; i = i / 2)
+	{
+		for (j = i; j < n; j++)
+		{
+			for (k = j - i; k >= 0; k = k - i)
+			{
+				if (a[k + i] >= a[k]) //if element at gap distance is greater or equal,keep it there only.so break.
+					break;
+
+				else // if ele at gap dist is less,swap it.
+					swap(a[k + i], a[k]);
+			}
+		}
+	}
+}
+
+int main()
+{
+	int ch;
+	
+	do
+	{
+		int n;
+		int a[1000];
+		cout << "---Enter size of array---" << endl;
+		cin >> n;
+
+		cout << "---Enter "<<n<<" elements of array---" << endl;
+		getdata(a, n);
+
+		cout << "\n\tSelect Your Choice" << endl;
+		cout << "\n\t1.Bubble Sort" << endl;
+		cout << "\n\t2.Selection Sort" << endl;
+		cout << "\n\t3.Insertion Sort" << endl;
+		cout << "\n\t4.Shell Sort" << endl;
+		cout << "\n\t5.Exit" << endl;
+		cin >> ch;
+
+		switch (ch)
+		{
+		case 1:
+			cout << "Before Sorting" << endl;
+			putdata(a, n);
+			cout << "Performing Bubble Sort" << endl;
+			bsort(a, n);
+			cout << "After Sort" << endl;
+			putdata(a, n);
+			cout << "Top 5 scorers" << endl;
+			topfive(a, n);
+			break;
+
+		case 2:
+			cout << "Before Sorting" << endl;
+			putdata(a, n);
+			cout << "Performing Selection Sort" << endl;
+			ssort(a, n);
+			cout << "After Sort" << endl;
+			putdata(a, n);
+			cout << "Top 5 scorers" << endl;
+			topfive(a, n);
+			break;
+
+		case 3:
+			cout << "Before Sorting" << endl;
+			putdata(a, n);
+			cout << "Performing Insertion Sort" << endl;
+			isort(a, n);
+			cout << "After Sort" << endl;
+			putdata(a, n);
+			cout << "Top 5 scorers" << endl;
+			topfive(a, n);
+			break;
+
+		case 4:
+			cout << "Before Sorting" << endl;
+			putdata(a, n);
+			cout << "Performing Shell Sort" << endl;
+			shsort(a, n);
+			cout << "After Sort" << endl;
+			putdata(a, n);
+			cout << "Top 5 scorers" << endl;
+			topfive(a, n);
+			break;
+
+		case 5:
+			cout << "Thank You !!!" << endl;
+			break;
+
+		default:cout << "Invalid Choice" << endl;
+
+		}
+
+	} while (ch !=5 );
+
+
+	cout << "Exit" << endl;
+
+	return 0;
+}
