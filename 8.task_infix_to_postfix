@@ -125,7 +125,8 @@ void convert(char in[20], char post[20])
 						}
 						else
 						{
-							//now unti and unless inc>ins, keep popping out and check one after other.
+							//now until and unless inc>ins
+							//keep popping out and check one after other.
 
 							while ( ins(stack[top]) >= pr1)
 							{
@@ -133,6 +134,8 @@ void convert(char in[20], char post[20])
 								top--;
 								j++;
 							}
+							
+							//and now push the operator into stack
 
 							top++;
 							stack[top] = ch;
