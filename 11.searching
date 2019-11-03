@@ -1,0 +1,166 @@
+//fibo search is left
+
+#include <iostream>
+using namespace std;
+
+void getdata(int a[], int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		cin >> a[i];
+	}
+}
+
+void bsort(int a[], int n)
+{
+	for (int i = 0; i < n - 1; i++)
+	{
+		for (int j = 0; j < (n - 1 - i); j++)
+		{
+			if (a[j] > a[j + 1])
+				swap(a[j], a[j + 1]);
+		}
+	}
+}
+
+void lsearch(int a[], int n, int key)
+{
+	int flag = 0;
+	int i;
+
+	for (i = 0; i < n; i++)
+	{
+		if (a[i] == key)
+		{
+		flag++;
+		break;
+		}
+	}
+	if (flag == 1)
+	{
+		cout << "---Element found " << i << "th position---" << endl;
+	}
+	else
+	{
+		cout << "---Not Found---" << endl;
+	}
+
+}
+
+void ssearch(int a[], int n, int key)
+{
+	int flag = 0;
+	a[n] = key;
+	int last = a[n];
+	int i;
+
+	for (i = 0; i<n; i++)
+	{
+		if (a[i] == last)
+		{
+			flag++;
+			break;
+		}
+	}
+	if (flag == 1)
+		cout << "---Found at " << i << " location---" << endl;
+
+	else
+		cout << "---Not Found---" << endl;
+}
+
+void bsearch(int a[], int l,int h,int key)
+{
+	int mid;
+	int flag = 0;
+
+	while (l < h)
+	{
+		mid = (l + h) / 2;
+
+		if (a[mid] == key)
+		{
+			flag++;
+			break;
+		}
+
+		else if (a[mid] > key)
+			h = mid - 1;
+
+		else
+			l = mid + 1;
+	}
+
+	if (flag==1)
+	{
+		cout << "---Element Found---" << endl;
+	}
+	else
+	{
+		cout << "---Element Not Found---" << endl;
+	}
+}
+
+void fsearch(int a[], int n, int key)
+{
+
+
+}
+
+int main()
+{
+	int ch;
+
+	do
+	{
+		int key;
+		int n;
+		cout << "Enter size" << endl;
+		cin >> n;
+		int a[1000];
+		cout << "Enter array elements" << endl;
+		getdata(a, n);
+
+		cout << "Enter element to be searched" << endl;
+		cin >> key;
+
+		cout << "\n\tSelect Your Choice" << endl;
+		cout << "\n\t1.Linear Search" << endl;
+		cout << "\n\t2.Sentinel Search" << endl;
+		cout << "\n\t3.Binary Search" << endl;
+		cout << "\n\t4.Fibonacci Search" << endl;
+		cout << "\n\t5.Exit" << endl;
+		cin >> ch;
+
+		switch (ch)
+		{
+		case 1:
+			lsearch(a,n,key);
+			break;
+
+		case 2:
+			ssearch(a,n,key);
+			break;
+
+		case 3:
+			bsort(a, n);
+			bsearch(a,0,n-1,key);
+			break;
+
+		case 4:
+			bsort(a, n);
+			fsearch(a, n,key);
+			break;
+
+		case 5:cout << "Thank You !!!" << endl;
+			break;
+
+		default:cout << "Invalid Choice" << endl;
+		}
+
+	} while (ch != 5);
+
+	cout << "Exit" << endl;
+
+   return 0;
+}
