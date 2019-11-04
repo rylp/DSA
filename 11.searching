@@ -1,5 +1,3 @@
-//fibo search is left
-
 #include <iostream>
 using namespace std;
 
@@ -100,10 +98,70 @@ void bsearch(int a[], int l,int h,int key)
 		cout << "---Element Not Found---" << endl;
 	}
 }
+int min(int x, int y)
+{
+	if (x > y)
+		return y;
+		
+	return x;
+}
 
 void fsearch(int a[], int n, int key)
 {
+	int flag = 0;
+	int fibm2 , fibm1, fibm;
+	fibm2 = 0;
+	fibm1 = 1;
+	fibm = fibm1 + fibm2;
 
+	while (fibm < n)
+	{
+		fibm2 = fibm1;
+		fibm1 = fibm;
+		fibm = fibm1 + fibm2;
+	}
+
+	int i;
+	int offset=-1;
+
+	while (fibm > 1)
+	{
+		i = min((offset + fibm2), (n - 1));
+
+		if (a[i] == key)
+		{
+			cout << "Element Found at " << i << " position" << endl;
+			flag++;
+			break;
+		}
+		else if (a[i] < key)
+		{
+			//take all 1 behind & offset=i;
+
+			fibm = fibm1;
+			fibm1 = fibm2;
+			fibm2 = fibm - fibm1;
+			offset = i;
+		}
+		else
+		{
+			//take all 2 behind
+
+			fibm = fibm2;
+			fibm1 = fibm1 - fibm2;
+			fibm2 = fibm - fibm1;
+		}
+	}
+
+	if (fibm1 && a[offset + 1] == key &&flag==0)
+	{
+		cout << "Found at " << n - 1 << " position" << endl;
+	}
+
+	else if(flag==0)
+	{
+		cout << "Not Found" << endl;
+	}
 
 }
 
