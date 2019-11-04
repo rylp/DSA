@@ -1,0 +1,295 @@
+#include<iostream>
+using namespace std;
+
+void getdata(int a[100][100], int m, int n)
+{
+	cout << "Enter elements row wise" << endl;
+
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			cin >> a[i][j];
+		}
+	}
+}
+
+void putdata(int a[100][100], int m, int n)
+{
+	cout << "Displaying Matrix" << endl;
+
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			cout << a[i][j] << " ";
+		}
+		cout << endl;
+	}
+	cout << endl;
+}
+
+void utm(int a[100][100], int m, int n)
+{
+	int flag = 0;
+
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < i; j++)
+		{
+			if (a[i][j] != 0)
+			{
+				flag++;
+				break;
+			}
+		}
+	}
+
+	if (flag == 0)
+		cout << "---Upper Triangular Matrix---" << endl;
+
+	else
+		cout << "---Not UTM---" << endl;
+}
+
+void diasum(int a[100][100], int m, int n)
+{
+	int sum = 0;
+
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			if(i==j)
+			sum = sum + a[i][j];
+		}
+	}
+
+	cout << "Diagonal Sum is: " << sum << endl;
+
+}
+
+void transpose(int a[100][100], int m, int n)
+{
+	int t[100][100];
+
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			t[j][i] = a[i][j];
+		}
+	}
+
+	cout << "Transpose" << endl;
+	putdata(a, n, m);
+
+}
+
+void add(int a[100][100], int m, int n)
+{
+	int b[100][100];
+	cout << "Enter elements of 2nd matrix" << endl;
+	cout << "Rows :" << m << endl;
+	cout << "Columns: " << n << endl;
+
+	getdata(b, m, n);
+
+
+	int c[100][100];
+
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			c[i][j] = a[i][j] + b[i][j];
+		}
+	}
+
+	cout << "Summation Matrix" << endl;
+	putdata(c, m, n);
+}
+
+void sub(int a[100][100], int m, int n)
+{
+	int b[100][100];
+	cout << "Enter elements of 2nd matrix" << endl;
+	cout << "Rows :" << m << endl;
+	cout << "Columns: " << n << endl;
+
+	getdata(b, m, n);
+
+
+	int c[100][100];
+
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			c[i][j] = a[i][j] - b[i][j];
+		}
+	}
+
+	cout << "Subtraction Matrix" << endl;
+	putdata(c, m, n);
+}
+
+void mul(int a[100][100], int m, int n)
+{
+	int i, j, k;
+
+	int l;
+
+	int b[100][100];
+	cout << "Enter elements of 2nd matrix" << endl;
+	cout << "Rows :" << n << endl;
+	cout << "Enter Number of columns of 2nd matrix" << endl;
+	cin >> l;
+
+	getdata(b, n, l);
+
+	int c[100][100];
+
+	for (int i = 0; i < m; i++)//resulting row
+	{
+		for (j = 0; j < l; j++)//resulting column
+		{
+			c[i][j] = 0;
+
+			for (k = 0; k < n; k++)//common row-column
+			{
+				c[i][j] = c[i][j] + (a[i][k] * b[k][j]);
+			}
+		}
+	}
+
+	cout << "Multiplication Matrix" << endl;
+	putdata(a, m, l);
+
+}
+
+void saddle(int a[100][100], int m, int n)
+{
+	int flag;
+	int index;
+	int value;
+
+	int i, j, k;
+
+	for (i = 0; i < m; i++)
+	{
+		flag = 0;
+		index = 0;
+		value = a[i][0];
+
+		for (j = 0; j < n; j++)
+		{
+			if (value > a[i][j])
+			{
+				value = a[i][j];
+				index = j;
+			}
+		}
+
+		for (k = 0; k < m; k++)
+		{
+			if (value < a[k][index])
+			{
+				flag++;
+				break;
+			}	
+		}
+		if (flag == 0)
+		{
+			cout << "---Saddle point : " << value << endl;
+			break;
+		}
+	}
+
+	if (flag != 0)
+	{
+		cout << "---No saddle point---" << endl;
+	}
+}
+int main()
+{
+	int ch;
+
+	do
+	{
+		int m, n;
+		cout << "Enter Rows:" << endl;
+		cin >> m;
+
+		cout << "Enter Columns:" << endl;
+		cin >> n;
+
+		int a[100][100];
+
+		cout << "Enter elements of matrix" << endl;
+		getdata(a, m, n);
+
+		putdata(a, m, n);
+
+		cout << "\n\tEnter your choice" << endl;
+		cout << "\n\t1.Upper Tri or Not" << endl;
+		cout << "\n\t2.Diagonal Sum" << endl;
+		cout << "\n\t3.Transpose" << endl;
+		cout << "\n\t4.Add" << endl;
+		cout << "\n\t5.Subtract" << endl;
+		cout << "\n\t6.Multiply" << endl;
+		cout << "\n\t7.Saddle point or Not" << endl;
+		cout << "\n\t8.Exit" << endl;
+		cin >> ch;
+
+		switch (ch)
+		{
+		case 1:
+			if (m != n)
+				cout << "Cant determine as not a square matrix" << endl;
+			else
+				utm(a, m, n);
+
+			break;
+
+		case 2:
+			if (m != n)
+				cout << "Not Square Matrix" << endl;
+			else
+				diasum(a, m, n);
+
+			break;
+
+		case 3:
+			transpose(a, m, n);
+			break;
+
+		case 4:
+			add(a, m, n);
+			break;
+
+		case 5:
+			sub(a, m, n);
+			break;
+
+		case 6:
+			mul(a, m, n);
+			break;
+
+		case 7:
+			saddle(a, m, n);
+			break;
+
+		case 8:
+			cout << "Thank You!!!" << endl;
+			break;
+			
+		default:cout << "Invalid Choice" << endl;
+		}
+
+	} while (ch != 8);
+
+	cout << "End" << endl;
+
+	return 0;
+}
