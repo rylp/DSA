@@ -1,0 +1,166 @@
+#include <iostream>
+#include<cmath>
+using namespace std;
+
+class poly
+{
+public:
+	int* a;
+	int size;
+public:
+	int eval(int val);
+	void add(poly *p1,poly *p2,int m,int n);
+	friend ostream& operator<<(ostream& out, poly& p);
+	friend istream& operator>>(istream& in, poly& p);
+	void mul(poly* p1, poly* p2, int m, int n);
+
+};
+
+int poly::eval(int val)
+{
+	int result=0;
+
+	for (int i = size; i >= 0; i--)
+	{
+		result += a[i] * pow(val, i);
+	}
+	return result;
+}
+
+istream& operator>>(istream& in, poly& p)
+{
+	for (int i = p.size; i >= 0; i--)
+	{
+		cout << "Enter coeff for deg " << i << endl;
+		in >> p.a[i];
+	}
+
+	return in;
+}
+
+ostream& operator<<(ostream& out, poly& p)
+{
+	cout << "Display..." << endl;
+
+	for (int i = p.size; i >= 0; i--)
+	{
+		if (i == 0)
+			cout <<"("<<p.a[i]<<")" ;
+		else
+			cout <<"("<< p.a[i] << "x^" << i << ") + ";
+	}
+	return out;
+}
+
+void poly::add(poly *p1,poly *p2,int m,int n)
+{
+	int i;
+
+	for (i = 0 ; i <= m && i<=n; i++)
+	{
+		a[i] = p1->a[i] + p2->a[i];
+	}
+
+	if (i == n + 1)
+	{
+		for (int j = n + 1; j <= m; j++)
+		{
+			a[j] = p1->a[j];
+		}
+	}
+	else
+	{
+		for (int j = m + 1; j <= n; j++)
+		{
+			a[j] = p2->a[j];
+		}
+	}
+
+}
+
+void poly::mul(poly* p1, poly* p2, int m, int n)
+{
+	for (int i = 0; i <= size; i++)
+	{
+		a[i] = 0;
+	}
+ 
+	for (int i = 0; i <= m; i++)
+	{
+		for (int j = 0; j <= n; j++)
+		{
+			a[i+j] += (p1->a[i] * p2->a[j]);
+		}
+			
+	}
+
+}
+
+int main()
+{
+	poly p1;
+	poly p2;
+	poly p3;
+	poly p4;
+
+	int val;
+
+	int m;
+	cout << "Enter highest degree of poly" << endl;
+	cin >> m;
+
+	p1.size = m;
+
+	p1.a = new int[m];
+
+	cout << "Enter elements of Polynomial" << endl;
+	cin >> p1;
+
+	cout << "Polynomial:" << endl;
+	cout << p1<<endl;
+
+	cout << "Enter value" << endl;
+	cin >> val;
+
+	int ans=p1.eval(val);
+	cout << "Result: " << ans << endl;
+
+	cout << "Addition" << endl;
+
+	int n;
+	cout << "Enter highest degree of poly" << endl;
+	cin >> n;
+
+	p2.size = n;
+
+	p2.a = new int[n];
+
+	cout << "Enter elements of Polynomial" << endl;
+	cin >> p2;
+
+	cout << "Polynomial:" << endl;
+	cout << p2<<endl;
+
+	cout << "Addition: " << endl;
+
+	if (m > n)
+		p3.size = m;
+	else
+		p3.size = n;
+
+	p3.a = new int[p3.size];
+
+	p3.add(&p1,&p2,m,n);
+	cout << p3<<endl;
+
+
+	cout << "Multiplication" << endl;
+
+	p4.size = m + n;
+	p4.a = new int[m + n];
+
+	p4.mul(&p1,&p2,m,n);
+	cout << p4;
+
+	return 0;
+}
