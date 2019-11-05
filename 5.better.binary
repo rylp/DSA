@@ -1,0 +1,242 @@
+#include <iostream>
+using namespace std;
+
+class node
+{
+	bool digit;
+	node* next;
+	node* prev;
+public:
+	friend class ll;
+};
+
+class ll
+{
+public:
+	node* head;
+	node* tail;
+	bool sum;
+	bool carry;
+	ll()
+	{
+		head = NULL;
+		tail = NULL;
+	}
+	void get_bin(int n);
+	void display();
+	void insert_front(bool b);
+	void ones(node *end);
+	void twos(node *end);
+	void add(node* ahead, node* bhead);
+	int count();
+};
+
+void ll::get_bin(int n)
+{
+	while (n != 1)
+	{
+
+		if (n % 2 == 0)//even
+		{
+			insert_front(0);
+		}
+		else//odd
+		{
+			insert_front(1);
+		}
+
+		n = n / 2;
+	}
+
+	insert_front(1);
+}
+
+void ll::display()
+{
+	node* start = head;
+	
+		while (start != NULL)
+		{
+			cout << start->digit << " ";
+			start = start->next;
+		}
+
+	cout << endl;
+}
+
+void ll::insert_front(bool b)
+{
+	node* nn = new node;
+	nn->digit = b;
+	nn->next = NULL;
+	nn->prev = NULL;
+
+	if (head == NULL && tail == NULL)//empty
+	{
+		head = nn;
+		tail = nn;
+	}
+
+	else//not empty
+	{
+		nn->next = head;
+		head->prev = nn;
+		head = nn;
+	}
+}
+
+void ll::ones(node *end)
+{
+
+	while (end != NULL)
+	{
+		if (end->digit == 1)
+		{
+			insert_front(0);
+		}
+		else
+		{
+			insert_front(1);
+		}
+		end = end->prev;
+	}
+}
+
+void ll::twos(node *end)
+{
+	sum = 0;
+	carry = 0;
+
+	if (end->digit == 1)
+	{
+		carry = 1;
+		insert_front(0);
+	}
+	else
+	{
+		carry = 0;
+		insert_front(1);
+	}
+
+	end = end->prev;
+
+	while (end != NULL)
+	{
+		if (carry == 0)
+		{
+			insert_front(end->digit);
+		}
+		else
+		{
+			if (end->digit == 1)
+			{
+				carry = 1;
+				insert_front(0);
+			}
+			else
+			{
+				carry = 0;
+				insert_front(1);
+			}
+		}
+		end = end->prev;
+	}
+
+	if (carry == 1)
+	{
+		insert_front(1);
+	}
+}
+
+void ll::add(node* end1, node* end2)
+{
+	sum = 0;
+	carry = 0;
+
+	while (end1 != NULL && end2!=NULL)
+	{
+		sum = (end1->digit ^ end2->digit ^ carry);
+		carry = (end1->digit & end2->digit) | (end1->digit & carry) | (end2->digit & carry);
+
+		insert_front(sum);
+
+		end1 = end1->prev;
+		end2 = end2->prev;
+	}
+
+	if (carry == 1)
+	{
+		insert_front(1);
+	}
+}
+
+int ll::count()
+{
+	int count = 0;
+	node* start = head;
+
+	while (start != NULL)
+	{
+		count++;
+		start = start->next;
+	}
+
+	return count;
+}
+
+int main()
+{
+	int n;
+	cout << "Enter Integer" << endl;
+	cin >> n;
+
+	ll a;
+	a.get_bin(n);
+
+	cout << "\n\tDisplaying in Binary:" << endl;
+	a.display();
+
+	ll b;
+	cout << "\n\t1's Complement" << endl;
+	b.ones(a.tail);
+	b.display();
+
+	ll c;
+	cout << "\n\t2's Complement" << endl;
+	c.twos(b.tail);
+	c.display();
+
+	ll e;
+
+	ll d;
+	int n2;
+	cout << "Enter another Integer" << endl;
+	cin >> n2;
+	d.get_bin(n2);
+	cout << "\n\tDisplaying..." << endl;
+	d.display();
+
+	int c1 = a.count();
+	int c2 = d.count();
+
+	if (c1 > c2)
+	{
+		for (int i = 0; i < (c1 - c2); i++)
+		{
+			d.insert_front(0);
+		}
+	}
+	else
+	{
+		for (int i = 0; i < (c1 - c2); i++)
+		{
+			a.insert_front(0);
+		}
+	}
+
+	e.add(a.tail, d.tail);
+	cout << "\n\tAddition" << endl;
+	e.display();
+
+	return 0;
+}
