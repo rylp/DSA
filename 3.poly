@@ -23,16 +23,15 @@ ostream& operator<<(ostream& out, poly& p)
 {
 	for (int i = p.size; i >= 0; i--)
 	{
-		if (i == 0)
+	    out<<"(";
+	    out<<p.a[i];
+		if (i != 0)
 		{
-			out << "( " << p.a[i] << ")";
-		}
-		else
-		{
-			out << "(" << p.a[i] << "x^" << i << ") + ";
+			out << "x^" <<i<<") + ";
 		}
 	}
-	return out;
+	out<<")";
+	return (out);
 }
 
 istream& operator>>(istream& in, poly& p)
@@ -42,7 +41,7 @@ istream& operator>>(istream& in, poly& p)
 		cout << "Enter Coefficient for Degree " << i << endl;
 		in >> p.a[i];
 	}
-	return in;
+	return (in);
 }
 
 int poly::eval(int n)
@@ -185,11 +184,11 @@ int main()
 			}
 
 			default:cout << "Invalid Choice" << endl;
-		
+
 		}
 
 	} while (ch !=4 );
-	
+
 	cout << "Exit" << endl;
 
 	return 0;
