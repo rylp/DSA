@@ -1,127 +1,183 @@
-//Write C / C++ program to store marks scored for first test of subject 'Data Structures and Algorithms' for N students.Compute
-//I.The average score of class
-//II.Highest scoreand lowest score of class
-//III.Marks scored by most of the students
-//IV.list of students who were absent for the test
-//Step-1: Define class arr(array was not allowed here)
-//Step2: Data members size and a[1000]
-//Step 3:create main() in which we have object of class and input n and then  call input() and output() fns
-//Step 4: ask the user for no of students present for test. so, abs=n-a.size;
-//Step 5: go for max fn.
-//Step 6: go for min fn.
-//Step 7: go for avrg fn. In it, take sum as a float and divide by n(total students). NOT size(present students).
-//Step6: go for freq fn. 
-//Freq fn
-// have 2 for loops . initialise count & temp_count. have a temp .
-//compare in 2 loops and check after inner loop is done everytime.
-
-#include <iostream>
+#include<iostream>
 using namespace std;
-class arr
+
+class student
 {
 public:
-	int a[1000];
+	float marks[100];
+	float a[100];
+	int rno[100];
 	int size;
-	void input();
-	int max();
-	int min();
-	float avrg(int n);
-	int freq();
-	void output();
+	int abs;
+	int pres;
+	student()
+	{
+		pres = 0;
+		abs = 0;
+	}
+	void getdata();
+	void getrno();
+	void putrno();
+	void max();
+	void min();
+	void avrg();
+	void freq();
+
 };
-void arr::input()
+
+void student::getdata()
 {
-	cout << "Enter the Marks " << endl;
+	cout << "Enter marks of students" << endl;
+	cout << "If student is absent, enter -1" << endl;
+
 	for (int i = 0; i < size; i++)
 	{
-		cin >> a[i];
+		cin >> marks[i];
 	}
-}
-int arr::max()
-{
-	int max=a[0];
+
 	for (int i = 0; i < size; i++)
 	{
-		if (a[i]>max)
-			max = a[i];
+		if (marks[i] == -1)
+		{
+			abs++;
+		}
 	}
-	return max;
-}
-int arr::min()
-{
-	int min =a[0];
+
+	getrno();
+
 	for (int i = 0; i < size; i++)
 	{
-		if (min > a[i])
-			min = a[i];
+		if (marks[i] != -1)
+		{
+			a[pres] = marks[i];
+			pres++;
+		}
 	}
-	return min;
 }
-float arr::avrg(int n)
+
+void student::getrno()
 {
-	float sum = 0.0;
-	float avrg;
-	for (int i = 0; i < size; i++)
+	cout << "Enter rno of "<<abs<< " absent students " << endl;
+
+	for (int i = 0; i < abs; i++)
+	{
+		cin >> rno[i];
+	}
+}
+
+void student::putrno()
+{
+	cout << "\n\tRno of " << abs << " absent students " << endl;
+
+	for (int i = 0; i < abs; i++)
+	{
+		cout << rno[i]<<endl;
+	}
+}
+
+void student::max()
+{
+	float temp = a[0];
+
+	for (int i = 0; i < pres; i++)
+	{
+		if (a[i] > temp)
+		{
+			temp = a[i];
+		}
+	}
+
+	cout << "\n\tHighest Marks are :" << temp << endl;
+}
+
+void student::min()
+{
+	float temp = a[0];
+
+	for (int i = 0; i < pres; i++)
+	{
+		if (a[i] < temp)
+		{
+			temp = a[i];
+		}
+	}
+
+	cout << "\n\tLowest Marks are :" << temp << endl;
+}
+
+void student::avrg()
+{
+	float sum=0.0;
+	for (int i = 0; i < pres; i++)
 	{
 		sum = sum + a[i];
 	}
-	avrg = sum /n;
-	return avrg;
+
+	float avrg;
+	avrg = sum / size;
+
+	cout << "\n\tAverage is : " << avrg << endl;
 }
-int arr::freq()
+
+void student::freq()
 {
-	int temp=0;//to get the marks that get repeated most
-	int count=0;//to count in the for loop repition of marks
-	int temp_count=count;//to check which freq of the counts is higher
-	int freq;//to store a[i] of outer loop.
-	for (int i = 0; i < size; i++)
+	int count=0;
+	int temp_count=0;
+	float value=0.0;
+	float temp=0.0;
+
+	for (int i = 0; i < pres; i++)
 	{
-			freq = a[i];
-			count=0;
-			for (int j = 0; j < size; j++)
+		count = 0;
+		temp = a[i];
+		for (int j = 0; j < pres; j++)
+		{
+			if (temp == a[j])
 			{
-				if (a[j] == freq)
-					count++;
+				count++;
 			}
-			if (count > temp_count)
-			{
-				temp = a[i];
-				temp_count = count;
-			}
+		}
+
+		if (count > temp_count)
+		{
+			temp_count = count;
+			value = a[i];
+		}
 	}
-	if (temp_count == 1)//if all are distinct elements return 0;
+
+	if (temp_count == 0)
 	{
-		return 0;
+		cout << "\n\tAll marks are distinct" << endl;
 	}
 	else
-	return temp;
-}
-void arr::output()
-{
-	for (int i = 0; i < size; i++)
 	{
-		cout << a[i] << " ";
+		cout << "\n\tMost Frequent marks are: " << value << endl;
 	}
 }
+
 int main()
 {
-	arr a;
-	int n;
-	cout << "Enter total number of students in class " << endl;
-	cin >> n;
-	cout << "Enter total number of students  present in class" << endl;
-	cin >> a.size;
-	a.input();
-	int max = a.max();
-	cout << "Max is " << max << endl;
-    int min = a.min();
-	cout << "Min is " << min << endl;
-	float avrg = a.avrg(n);
-	cout << "Average is " << avrg << endl;
-	int freq = a.freq();
-	cout << "Frequent marks " << freq << endl;
-	int abs = n - a.size;
-	cout << "Absent students are " << abs << endl;
-	a.output();
+	student s;
+	cout << "Enter total no of students in class" << endl;
+	cin >> s.size;
+
+	cout << "Enter data of students" << endl;
+	s.getdata();
+
+	cout << "\n\tHighest" << endl;
+	s.max();
+
+	cout << "\n\tLowest" << endl;
+	s.min();
+
+	cout << "\n\tAverage" << endl;
+	s.avrg();
+
+	cout << "\n\tFrequent Marks" << endl;
+	s.freq();
+
+	cout << "\n\tList of absent students" << endl;
+	s.putrno();
+
 	return 0;
 }
