@@ -1,4 +1,4 @@
-#include <iostream>
+#include<iostream>
 #include<cmath>
 using namespace std;
 
@@ -7,60 +7,61 @@ class poly
 public:
 	int* a;
 	int size;
-public:
-	int eval(int val);
-	void add(poly *p1,poly *p2,int m,int n);
+	poly()
+	{
+		size = 0;
+	}
 	friend ostream& operator<<(ostream& out, poly& p);
 	friend istream& operator>>(istream& in, poly& p);
+	int eval(int n);
+	void add(poly* p1, poly* p2, int m, int n);
 	void mul(poly* p1, poly* p2, int m, int n);
 
 };
 
-int poly::eval(int val)
+ostream& operator<<(ostream& out, poly& p)
 {
-	int result=0;
-
-	for (int i = size; i >= 0; i--)
+	for (int i = p.size; i >= 0; i--)
 	{
-		result += a[i] * pow(val, i);
+		if (i == 0)
+		{
+			out << "( " << p.a[i] << ")";
+		}
+		else
+		{
+			out << "(" << p.a[i] << "x^" << i << ") + ";
+		}
 	}
-	return result;
+	return out;
 }
 
 istream& operator>>(istream& in, poly& p)
 {
 	for (int i = p.size; i >= 0; i--)
 	{
-		cout << "Enter coeff for deg " << i << endl;
+		cout << "Enter Coefficient for Degree " << i << endl;
 		in >> p.a[i];
 	}
-
 	return in;
 }
 
-ostream& operator<<(ostream& out, poly& p)
+int poly::eval(int n)
 {
-	cout << "Display..." << endl;
-
-	for (int i = p.size; i >= 0; i--)
+	int sum=0;
+	for (int i = size; i >= 0; i--)
 	{
-		if (i == 0)
-			cout <<"("<<p.a[i]<<")" ;
-		else
-			cout <<"("<< p.a[i] << "x^" << i << ") + ";
+		sum += a[i] * pow(n,i);
 	}
-	return out;
+	return sum;
 }
 
-void poly::add(poly *p1,poly *p2,int m,int n)
+void poly::add(poly* p1, poly* p2, int m, int n)
 {
 	int i;
-
-	for (i = 0 ; i <= m && i<=n; i++)
+	for (i = 0; i <= m && i <= n; i++)
 	{
 		a[i] = p1->a[i] + p2->a[i];
 	}
-
 	if (i == n + 1)
 	{
 		for (int j = n + 1; j <= m; j++)
@@ -75,7 +76,6 @@ void poly::add(poly *p1,poly *p2,int m,int n)
 			a[j] = p2->a[j];
 		}
 	}
-
 }
 
 void poly::mul(poly* p1, poly* p2, int m, int n)
@@ -84,83 +84,113 @@ void poly::mul(poly* p1, poly* p2, int m, int n)
 	{
 		a[i] = 0;
 	}
- 
+
 	for (int i = 0; i <= m; i++)
 	{
 		for (int j = 0; j <= n; j++)
 		{
-			a[i+j] += (p1->a[i] * p2->a[j]);
+			a[i + j] += (p1->a[i] * p2->a[j]);
 		}
-			
 	}
-
 }
 
 int main()
 {
+	int m, n;
+
 	poly p1;
-	poly p2;
-	poly p3;
-	poly p4;
 
-	int val;
+	cout << "Polynomial 1" << endl;
 
-	int m;
-	cout << "Enter highest degree of poly" << endl;
+	cout << "Enter Highest Degree" << endl;
 	cin >> m;
 
 	p1.size = m;
+	p1.a = new int[p1.size];
 
-	p1.a = new int[m];
-
-	cout << "Enter elements of Polynomial" << endl;
 	cin >> p1;
 
-	cout << "Polynomial:" << endl;
-	cout << p1<<endl;
+	cout << "Display..." << endl;
+	cout << p1 << endl;
 
-	cout << "Enter value" << endl;
-	cin >> val;
+	poly p2;
 
-	int ans=p1.eval(val);
-	cout << "Result: " << ans << endl;
+	cout << "Polynomial 2" << endl;
 
-	cout << "Addition" << endl;
-
-	int n;
-	cout << "Enter highest degree of poly" << endl;
+	cout << "Enter Highest Degree" << endl;
 	cin >> n;
 
 	p2.size = n;
+	p2.a = new int[p2.size];
 
-	p2.a = new int[n];
-
-	cout << "Enter elements of Polynomial" << endl;
 	cin >> p2;
 
-	cout << "Polynomial:" << endl;
-	cout << p2<<endl;
+	cout << "Display..." << endl;
+	cout << p2 << endl;
 
-	cout << "Addition: " << endl;
+	int ch;
+	int ele;
 
-	if (m > n)
-		p3.size = m;
-	else
-		p3.size = n;
+	do
+	{
+		cout << "\n\tSelect your Choice" << endl;
+		cout << "\n\t1.Evaluation" << endl;
+		cout << "\n\t2.Addition" << endl;
+		cout << "\n\t3.Multiplication" << endl;
+		cout << "\n\t4.Exit" << endl;
+		cin >> ch;
 
-	p3.a = new int[p3.size];
+		switch (ch)
+		{
+			case 1:
+			{
+				cout << "Enter Value for Evaluation" << endl;
+				cin >> ele;
+				int res = p1.eval(ele);
+				cout << "Result: " << res << endl;
+				break;
+			}
+			case 2:
+			{
+				poly p3;
 
-	p3.add(&p1,&p2,m,n);
-	cout << p3<<endl;
+				if (m > n)
+				{
+					p3.size = m;
+				}
+				else
+				{
+					p3.size = n;
+				}
+				p3.a = new int[p3.size];
+				p3.add(&p1, &p2, m, n);
+				cout << p3 << endl;
+				break;
+			}
+			case 3:
+			{
+				poly p4;
 
+				p4.size = (m + n);
+				p4.a = new int[m + n];
 
-	cout << "Multiplication" << endl;
+				p4.mul(&p1, &p2, m, n);
+				cout << p4 << endl;
+				break;
+			}
+			case 4:
+			{
+				cout << "Thank You!!!" << endl;
+				break;
+			}
 
-	p4.size = m + n;
-	p4.a = new int[m + n];
+			default:cout << "Invalid Choice" << endl;
+		
+		}
 
-	p4.mul(&p1,&p2,m,n);
-	cout << p4;
+	} while (ch !=4 );
+	
+	cout << "Exit" << endl;
 
 	return 0;
 }
