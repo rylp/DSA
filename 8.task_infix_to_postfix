@@ -28,8 +28,6 @@
 //1. int solve(char post[]);
 //2. int eval(int op1,char ch,int op2)
 
-//refer task compusys book
-
 #include <iostream>
 using namespace std;
 
