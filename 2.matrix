@@ -72,6 +72,14 @@ void diasum(int a[100][100], int m, int n)
 void transpose(int a[100][100], int m, int n)
 {
 	int t[100][100];
+	//init
+	for(int i=0;i<n;i++)
+	{
+		for(int j=0;j<m;j++)
+		{
+			t[i][j]=0;
+		}
+	}
 
 	for (int i = 0; i < m; i++)
 	{
@@ -82,7 +90,7 @@ void transpose(int a[100][100], int m, int n)
 	}
 
 	cout << "Transpose" << endl;
-	putdata(a, n, m);
+	putdata(t, n, m);
 
 }
 
@@ -164,7 +172,7 @@ void mul(int a[100][100], int m, int n)
 	}
 
 	cout << "Multiplication Matrix" << endl;
-	putdata(a, m, l);
+	putdata(c, m, l);
 
 }
 
@@ -184,7 +192,7 @@ void saddle(int a[100][100], int m, int n)
 
 		for (j = 0; j < n; j++)
 		{
-			if (value > a[i][j])
+			if (value > a[i][j] && value!=a[i][j])
 			{
 				value = a[i][j];
 				index = j;
