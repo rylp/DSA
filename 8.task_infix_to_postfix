@@ -16,7 +16,7 @@
 //5. Writing properly the inc and ins functions.
 //    prototype: int inc/ins (char ch)
 //6. Priority table.
-//    Operator  Incoming  Instack
+//    Operator  	Incoming  		Instack
 //      +,-			1		 1
 //      *,/			2		 2
 //	^			3		 3
