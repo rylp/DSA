@@ -60,8 +60,8 @@ void diasum(int a[100][100], int m, int n)
 	{
 		for (int j = 0; j < n; j++)
 		{
-			if(i==j)
-			sum = sum + a[i][j];
+			if (i == j)
+				sum = sum + a[i][j];
 		}
 	}
 
@@ -73,11 +73,11 @@ void transpose(int a[100][100], int m, int n)
 {
 	int t[100][100];
 	//init
-	for(int i=0;i<n;i++)
+	for (int i = 0; i < n; i++)
 	{
-		for(int j=0;j<m;j++)
+		for (int j = 0; j < m; j++)
 		{
-			t[i][j]=0;
+			t[i][j] = 0;
 		}
 	}
 
@@ -97,25 +97,38 @@ void transpose(int a[100][100], int m, int n)
 void add(int a[100][100], int m, int n)
 {
 	int b[100][100];
+	int n1,m1;
+
 	cout << "Enter elements of 2nd matrix" << endl;
-	cout << "Rows :" << m << endl;
-	cout << "Columns: " << n << endl;
+	cout << "Rows :" << endl;
+	cin >> m1;
+	cout << "Columns: "<< endl;
+	cin >> n1;
 
-	getdata(b, m, n);
-
-
-	int c[100][100];
-
-	for (int i = 0; i < m; i++)
+	if (m1 != m || n1 != n)
 	{
-		for (int j = 0; j < n; j++)
-		{
-			c[i][j] = a[i][j] + b[i][j];
-		}
+		cout << "---Addition not possible---" << endl;
 	}
 
-	cout << "Summation Matrix" << endl;
-	putdata(c, m, n);
+	else
+	{
+		getdata(b, m, n);
+
+
+		int c[100][100];
+
+		for (int i = 0; i < m; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				c[i][j] = a[i][j] + b[i][j];
+			}
+		}
+
+		cout << "Summation Matrix" << endl;
+		putdata(c, m, n);
+	}
+	
 }
 
 void sub(int a[100][100], int m, int n)
@@ -146,33 +159,42 @@ void mul(int a[100][100], int m, int n)
 {
 	int i, j, k;
 
-	int l;
+	int o,l;
 
 	int b[100][100];
 	cout << "Enter elements of 2nd matrix" << endl;
-	cout << "Rows :" << n << endl;
+	cout << "Rows" << endl;
+	cin >> o;
 	cout << "Enter Number of columns of 2nd matrix" << endl;
 	cin >> l;
 
-	getdata(b, n, l);
-
-	int c[100][100];
-
-	for (int i = 0; i < m; i++)//resulting row
+	if (n != o)
 	{
-		for (j = 0; j < l; j++)//resulting column
-		{
-			c[i][j] = 0;
+		cout << "Not Possible" << endl;
+	}
+	else
+	{
+		getdata(b, n, l);
 
-			for (k = 0; k < n; k++)//common row-column
+		int c[100][100];
+
+		for (int i = 0; i < m; i++)//resulting row
+		{
+			for (j = 0; j < l; j++)//resulting column
 			{
-				c[i][j] = c[i][j] + (a[i][k] * b[k][j]);
+				c[i][j] = 0;
+
+				for (k = 0; k < n; k++)//common row-column
+				{
+					c[i][j] = c[i][j] + (a[i][k] * b[k][j]);
+				}
 			}
 		}
-	}
 
-	cout << "Multiplication Matrix" << endl;
-	putdata(c, m, l);
+		cout << "Multiplication Matrix" << endl;
+		putdata(c, m, l);
+	}
+	
 
 }
 
@@ -192,7 +214,7 @@ void saddle(int a[100][100], int m, int n)
 
 		for (j = 0; j < n; j++)
 		{
-			if (value > a[i][j] && value!=a[i][j])
+			if (value > a[i][j] && value != a[i][j])
 			{
 				value = a[i][j];
 				index = j;
@@ -205,7 +227,7 @@ void saddle(int a[100][100], int m, int n)
 			{
 				flag++;
 				break;
-			}	
+			}
 		}
 		if (flag == 0)
 		{
@@ -222,23 +244,22 @@ void saddle(int a[100][100], int m, int n)
 int main()
 {
 	int ch;
+	int m, n;
+	cout << "Enter Rows:" << endl;
+	cin >> m;
+
+	cout << "Enter Columns:" << endl;
+	cin >> n;
+
+	int a[100][100];
+
+	cout << "Enter elements of matrix" << endl;
+	getdata(a, m, n);
+
+	putdata(a, m, n);
 
 	do
 	{
-		int m, n;
-		cout << "Enter Rows:" << endl;
-		cin >> m;
-
-		cout << "Enter Columns:" << endl;
-		cin >> n;
-
-		int a[100][100];
-
-		cout << "Enter elements of matrix" << endl;
-		getdata(a, m, n);
-
-		putdata(a, m, n);
-
 		cout << "\n\tEnter your choice" << endl;
 		cout << "\n\t1.Upper Tri or Not" << endl;
 		cout << "\n\t2.Diagonal Sum" << endl;
@@ -291,7 +312,7 @@ int main()
 		case 8:
 			cout << "Thank You!!!" << endl;
 			break;
-			
+
 		default:cout << "Invalid Choice" << endl;
 		}
 
