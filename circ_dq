@@ -1,0 +1,179 @@
+#include <iostream>
+#define MAX 5
+using namespace std;
+class deque
+{
+public:
+	int a[MAX];
+	int front;
+	int rear;
+	void init();
+	bool empty();
+	bool full();
+	void ins_front(int n);
+	void ins_back(int n);
+	void del_front();
+	void del_back();
+	void display();
+};
+
+void deque::init()
+{
+	front = -1;
+	rear = -1;
+}
+
+bool deque::empty()
+{
+	if (front == -1)
+		return 1;
+
+	return 0;
+}
+
+bool deque::full()
+{
+	if ((rear + 1) % MAX == front)
+		return 1;
+
+	return 0;
+}
+
+void deque::ins_back(int n)
+{
+	if (full())//Full
+	{
+		cout << "FUll" << endl;
+	}
+	else if (empty())//Empty
+	{
+		front = 0;
+		rear = 0;
+		a[rear] = n;
+	}
+	else//Multi
+	{
+		rear = (rear + 1) % MAX;
+		a[rear] = n;
+	}
+}
+
+void deque::ins_front(int n)
+{
+	if (full())
+	{
+		cout << "FULL" << endl;
+	}
+	else if (empty())
+	{
+		front = 0;
+		rear = 0;
+		a[rear] = n;
+	}
+	else//Multi
+	{
+		front = (front - 1 + MAX) % MAX;
+		a[front] = n;
+	}
+
+}
+
+void deque::del_front()
+{
+	if (empty())
+	{
+		cout << "EMPTY" << endl;
+	}
+	else if (front == 0 && rear == 0)//Single 
+	{
+		init();
+	}
+	else//Multi
+	{
+		front = (front + 1) % MAX;
+	}
+}
+
+void deque::del_back()
+{
+	if (empty())
+	{
+		cout << "Empty" << endl;
+	}
+	else if (front == 0 && rear == 0)//Single
+	{
+		init();
+	}
+	else//Multi
+	{
+		rear = (rear - 1 + MAX) % MAX;
+	}
+}
+
+void deque::display()
+{
+	for (int i = front; i != rear; i = (i + 1) % MAX)
+	{
+		cout << a[i] << endl;
+	}
+	cout << a[rear] << endl;
+}
+
+int main()
+{
+	int ch;
+	int ele, e;
+	deque dq;
+	dq.init();
+
+	do
+	{
+		cout << "Select Your Choice" << endl;
+		cout << "\n\t1.Insert at start" << endl;
+		cout << "\n\t2.Insert at end" << endl;
+		cout << "\n\t3.Delete at start" << endl;
+		cout << "\n\t4.Delete at end" << endl;
+		cout << "\n\t5.Display" << endl;
+		cout << "\n\t6.Exit" << endl;
+		cin >> ch;
+
+		switch (ch)
+		{
+		case 1:
+			cout << "Enter element to be inserted" << endl;
+			cin >> ele;
+			dq.ins_front(ele);
+			break;
+
+		case 2:
+			cout << "Enter element to be inserted" << endl;
+			cin >> e;
+			dq.ins_back(e);
+			break;
+
+		case 3:
+			dq.del_front();
+			break;
+
+		case 4:
+			dq.del_back();
+			break;
+
+		case 5:
+			dq.display();
+			break;
+
+		case 6:
+			cout << "\n\tThank You !!!" << endl;
+			break;
+
+		default:cout << "Invalid Option" << endl;
+		}
+
+	} while (ch != 6);
+
+	cout << "\n\t Exit!!!" << endl;
+
+	return 0;
+	
+}
