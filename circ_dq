@@ -1,3 +1,7 @@
+//EMPTY:- front==-1
+//FULL:- (rear+1)%MAX==front
+
+
 #include <iostream>
 #define MAX 5
 using namespace std;
