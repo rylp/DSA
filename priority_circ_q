@@ -1,0 +1,150 @@
+#include <iostream>
+#define MAX 5
+using namespace std;
+
+class priqueue
+{
+public:
+	int a[MAX];
+	int front;
+	int rear;
+	bool full();
+	bool empty();
+	void init();
+	void insert(int n);
+	void del();
+	void display();
+};
+
+bool priqueue::empty()
+{
+	if (front == -1)
+		return 1;
+
+	return 0;
+}
+
+bool priqueue::full()
+{
+	if ((rear + 1) % MAX == front)
+		return 1;
+
+	return 0;
+}
+
+void priqueue::init()
+{
+	front = -1;
+	rear = -1;
+}
+
+void priqueue::del()
+{
+	//only del_front
+
+	if (empty())
+	{
+		cout << "Empty" << endl;
+	}
+	else if (front == 0 && rear == 0)//single
+	{
+		init();
+	}
+	else
+	{
+		front = (front + 1) % MAX;
+	}
+}
+
+void priqueue::insert(int n)
+{
+	if (full())
+	{
+		cout << "Full" << endl;
+	}
+	
+	else if (empty())
+	{
+		front = 0;
+		rear = 0;
+		a[rear]=n;
+		cout << "Done" << endl;
+	}
+	else
+	{
+		int i = rear;
+
+		while (n > a[i])//shift
+		{
+			a[(i + 1) % MAX] = a[i];//a[i+1]=a[i]
+			i = (i - 1 + MAX) % MAX;//i--
+
+			if ((i + 1) % MAX == front)//it is highest ele
+			{
+				break;
+			}
+		}
+
+		i = (i + 1) % MAX;//i++
+		a[i] = n;
+
+		rear = (rear + 1) % MAX;//rear++
+	}
+
+}
+
+void priqueue::display()
+{
+	for (int i = front; i != rear; i = (i + 1) % MAX)
+	{
+		cout << a[i] << endl;
+	}
+	cout << a[rear] << endl;
+}
+
+
+int main()
+{
+	int ch;
+	int ele;
+	priqueue pq;
+	pq.init();
+
+	do
+	{
+		cout << "\n\t Enter ur Choice" << endl;
+		cout << "\n\t 1.Add Job" << endl;
+		cout << "\n\t 2.Delete Job" << endl;
+		cout << "\n\t 3.Display " << endl;
+		cout << "\n\t 4.Exit" << endl;
+
+		cin >> ch;
+
+		switch (ch)
+		{
+		case 1:
+			cout << "Enter PRN of Job" << endl;
+			cin >> ele;
+			pq.insert(ele);
+			break;
+
+		case 2:
+			pq.del();
+			break;
+
+		case 3:
+			cout << "---Displaying Queue---" << endl;
+			pq.display();
+			break;
+
+		case 4:
+			cout << "\n\tThank You!!!" << endl;
+			break;
+
+		default:cout << "Invalid Choice" << endl;
+		}
+	} while (ch != 4);
+
+	cout << "\n\tExit" << endl;
+	return 0;
+}
