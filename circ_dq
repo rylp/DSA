@@ -88,7 +88,7 @@ void deque::del_front()
 	{
 		cout << "EMPTY" << endl;
 	}
-	else if (front == 0 && rear == 0)//Single 
+	else if (front == rear)//Single 
 	{
 		init();
 	}
@@ -104,7 +104,7 @@ void deque::del_back()
 	{
 		cout << "Empty" << endl;
 	}
-	else if (front == 0 && rear == 0)//Single
+	else if (front == rear)//Single
 	{
 		init();
 	}
