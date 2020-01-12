@@ -22,7 +22,7 @@ public:
 	void min();
 	void avrg();
 	void freq();
-};
+}; // remove this
 
 void student::getdata()
 {
